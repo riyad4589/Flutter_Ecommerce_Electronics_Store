@@ -281,11 +281,10 @@ L'API mock sera disponible sur `http://localhost:3000`
 Pour tester l'application, utilisez les identifiants suivants :
 
 **Utilisateur standard :**
-- Email : `user@test.com`
-- Mot de passe : `password123`
+- Créer un nouveau utilisateur
 
 **Administrateur :**
-- Email : `admin@shop.com`
+- Email : `admin`
 - Mot de passe : `admin123`
 
 ### Navigation principale
