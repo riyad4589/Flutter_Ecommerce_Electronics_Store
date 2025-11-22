@@ -423,7 +423,7 @@ Voir [AMELIORATIONS_UI_UX.md](AMELIORATIONS_UI_UX.md) pour plus de détails.
 
 ---
 
-## 📱 Captures d'écran
+# 📱 Captures d'écran
 
 ## 🚀 Page de Lancement
 
