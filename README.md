@@ -343,73 +343,6 @@ online-shop/
 └── AMELIORATIONS_UI_UX.md   # Documentation UI/UX
 ```
 
----
-
-## 🗄️ Base de données
-
-### Schéma SQLite
-
-#### Table `users`
-```sql
-CREATE TABLE users (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  email TEXT NOT NULL UNIQUE,
-  username TEXT NOT NULL UNIQUE,
-  password TEXT NOT NULL,
-  profile_image TEXT,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
-)
-```
-
-#### Table `products`
-```sql
-CREATE TABLE products (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  description TEXT,
-  price REAL NOT NULL,
-  discount_price REAL,
-  image_url TEXT,
-  category_id TEXT,
-  brand TEXT,
-  rating REAL,
-  review_count INTEGER,
-  created_at TEXT NOT NULL
-)
-```
-
-#### Table `orders`
-```sql
-CREATE TABLE orders (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL,
-  total_amount REAL NOT NULL,
-  status TEXT NOT NULL,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
-)
-```
-
-#### Autres tables
-- `categories` - Catégories de produits
-- `cart_items` - Articles du panier
-- `favorites` - Produits favoris
-- `auth_tokens` - Tokens d'authentification
-- `addresses` - Adresses de livraison
-
-### Migrations
-
-Le système de migration automatique gère les mises à jour de schéma :
-- Version 1 → 2 : Ajout tables users et products
-- Version 2 → 3 : Ajout champ password
-- Version 3 → 4 : Amélioration index
-- Version 4 → 5 : Table addresses
-- Version 5 → 6 : Optimisations
-
----
-
 ## 🌐 API Mock
 
 Un serveur Node.js est fourni pour le développement local :
@@ -504,87 +437,36 @@ Voir [AMELIORATIONS_UI_UX.md](AMELIORATIONS_UI_UX.md) pour plus de détails.
 #### Utilisateur
 
 | Inscription | Connexion Utilisateur |
-|------------|----------------------|
-| ![Signup](screenshots/signup.png) | ![Login](screenshots/login-user.png) |
+|-------------|------------------------|
+| ![Signup](screenshots/user/signup.png) | ![Login](screenshots/user/login-user.png) |
 
 #### Administrateur
 
-| Connexion Admin |
-|-----------------|
-| ![Admin Login](screenshots/admin-login.png) |
+|Connexion Administrateur|
+|------------------------|
+![Admin Login](screenshots/admin/admin-login.png)
 
 ### Interface Utilisateur
 
-| Catalogue Produits | Détails Produit | Panier |
-|-------------------|----------------|--------|
-| ![Products](screenshots/products.png) | ![Produits](screenshots/produits.png) | ![Cart](screenshots/cart.png) |
+|Liste des Produits| Panier | Commandes | Suivre la commande | Profile |
+|------------------|--------|-----------|--------------------|---------|
 
-| Commandes | Suivi Commande | Profil |
-|-----------|----------------|--------|
-| ![Commande](screenshots/commande.png) | ![Suivi](screenshots/suivi.png) | ![Profile](screenshots/profile.png) |
+| ![Produits](screenshots/user/produits.png) |
+![Cart](screenshots/user/cart.png) |
+![Commande](screenshots/user/commande.png) |
+![Suivi](screenshots/user/suivi.png) |
+![Profile](screenshots/user/profile.png) |
 
 ### Panel d'Administration
 
-| Dashboard Admin | Gestion Produits |
-|----------------|------------------|
-| ![Dashboard](screenshots/dashboard.png) | ![Products Admin](screenshots/produits.png) |
+|Dashboard | Liste des Produits | Produits par client | Liste des commandes | Liste des Utilisateur |
+|----------|--------------------|---------------------|---------------------|-----------------------|
 
-| Produits par Client | Toutes les Commandes | Gestion Utilisateurs |
-|---------------------|---------------------|---------------------|
-| ![Product Client](screenshots/product-client.png) | ![All Orders](screenshots/all-commandes.png) | ![Users](screenshots/users.png) |
-
----
-
-## 🗺️ Roadmap
-
-### Version 1.1 (En cours)
-- [ ] Infinite scroll sur le catalogue
-- [ ] Notifications push
-- [ ] Partage de produits
-- [ ] Mode hors ligne complet
-
-### Version 1.2 (Prévue)
-- [ ] Paiement intégré
-- [ ] Chat support client
-- [ ] Programme de fidélité
-- [ ] Recommandations personnalisées
-
-### Version 2.0 (Future)
-- [ ] Multi-langue (i18n)
-- [ ] Multi-devise
-- [ ] Géolocalisation des points de vente
-- [ ] Réalité augmentée (AR) pour les produits
-
----
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! Voici comment contribuer :
-
-1. **Fork** le projet
-2. **Créer** une branche feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** les changements (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** vers la branche (`git push origin feature/AmazingFeature`)
-5. **Ouvrir** une Pull Request
-
-### Guidelines
-
-- Suivre les conventions de code Dart
-- Ajouter des tests pour les nouvelles fonctionnalités
-- Documenter le code avec des commentaires clairs
-- Respecter l'architecture Clean Architecture
-
----
-
-## 📊 Statistiques du projet
-
-![GitHub stars](https://img.shields.io/github/stars/votre-username/online-shop?style=social)
-![GitHub forks](https://img.shields.io/github/forks/votre-username/online-shop?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/votre-username/online-shop?style=social)
-
-![Lines of Code](https://img.shields.io/tokei/lines/github/votre-username/online-shop)
-![Code Size](https://img.shields.io/github/languages/code-size/votre-username/online-shop)
-![Last Commit](https://img.shields.io/github/last-commit/votre-username/online-shop)
+![Dashboard](screenshots/admin/dashboard.png)
+![Products Admin](screenshots/admin/products.png)
+![Product Client](screenshots/admin/product-client.png)
+![All Orders](screenshots/admin/all-commandes.png)
+![Users](screenshots/admin/users.png)
 
 ---
 
