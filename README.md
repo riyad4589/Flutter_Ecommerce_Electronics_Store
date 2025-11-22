@@ -403,6 +403,23 @@ Le serveur démarre sur `http://localhost:3000`
 
 <div align="center">
 
+
+# 👤 Contributeurs
+
+**MAJGHIROU Mohamed Riyad**
+
+- GitHub: [@riyad4589](https://github.com/riyad4589)
+- Email: [riyadmaj10@gmail.com](mailto:riyadmaj10@gmail.com)
+- LinkedIn: [Mohamed Riyad MAJGHIROU](https://www.linkedin.com/in/mohamed-riyad-majghirou-5b62aa388/)
+
+
+**AZZAM Mohamed**
+
+- GitHub: [@Azzammoo10](https://github.com/Azzammoo10)
+- Email: [azzam.moo10@gmail.com](mailto:azzam.moo10@gmail.com)
+- LinkedIn: [Mohamed AZZAM](https://www.linkedin.com/in/mohamed-azzam-93115823a/)
+
+
 ### ⭐ Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile !
 
 
