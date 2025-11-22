@@ -427,9 +427,11 @@ flutter test integration_test/
 
 <div align="center">
 
-### Écran d'Accueil
-<img src="screenshots/home.png" width="250"/>
-<p><i>Premier écran affiché au lancement de l'application</i></p>
+| **Écran d'Accueil** |
+|---------------------|
+| <img src="screenshots/home.png" width="250"/> |
+
+*Premier écran affiché au lancement de l'application*
 
 </div>
 
@@ -441,13 +443,9 @@ flutter test integration_test/
 
 <div align="center">
 
-#### Inscription
-<img src="screenshots/user/signup.png" width="230"/>
-<p><i>Formulaire permettant à un nouvel utilisateur de créer un compte</i></p>
-
-#### Connexion Utilisateur
-<img src="screenshots/user/login-user.png" width="230"/>
-<p><i>Écran de connexion pour accéder à l'espace utilisateur</i></p>
+| **Inscription** | **Connexion Utilisateur** |
+|------------------|---------------------------|
+| <img src="screenshots/user/signup.png" width="230"/> | <img src="screenshots/user/login-user.png" width="230"/> |
 
 </div>
 
@@ -457,37 +455,20 @@ flutter test integration_test/
 
 <div align="center">
 
-#### Connexion Administrateur
-<img src="screenshots/admin/admin-login.png" width="260"/>
-<p><i>Interface d’authentification réservée aux administrateurs</i></p>
+| **Connexion Administrateur** |
+|------------------------------|
+| <img src="screenshots/admin/admin-login.png" width="260"/> |
 
 </div>
 
----
 
 ## 🎨 Interface Utilisateur
 
 <div align="center">
 
-### Liste des Produits
-<img src="screenshots/user/produits.png" width="200"/>
-<p><i>Affichage des produits disponibles à l’achat</i></p>
-
-### Panier
-<img src="screenshots/user/cart.png" width="200"/>
-<p><i>Vue du panier contenant les articles sélectionnés</i></p>
-
-### Commandes
-<img src="screenshots/user/commande.png" width="200"/>
-<p><i>Historique des commandes passées par l’utilisateur</i></p>
-
-### Suivi de commande
-<img src="screenshots/user/suivi.png" width="200"/>
-<p><i>Suivi en temps réel de l’état de la commande</i></p>
-
-### Profil
-<img src="screenshots/user/profile.png" width="200"/>
-<p><i>Informations personnelles de l’utilisateur et paramètres du compte</i></p>
+| **Liste des Produits** | **Panier** | **Commandes** | **Suivi de commande** | **Profil** |
+|------------------------|------------|----------------|-------------------------|------------|
+| <img src="screenshots/user/produits.png" width="180"/> | <img src="screenshots/user/cart.png" width="180"/> | <img src="screenshots/user/commande.png" width="180"/> | <img src="screenshots/user/suivi.png" width="180"/> | <img src="screenshots/user/profile.png" width="180"/> |
 
 </div>
 
@@ -497,25 +478,9 @@ flutter test integration_test/
 
 <div align="center">
 
-### Dashboard
-<img src="screenshots/admin/dashboard.png" width="230"/>
-<p><i>Vue globale des statistiques principales</i></p>
-
-### Liste des Produits
-<img src="screenshots/admin/products.png" width="230"/>
-<p><i>Gestion complète des produits (ajout, modification, suppression)</i></p>
-
-### Produits par Client
-<img src="screenshots/admin/product-client.png" width="230"/>
-<p><i>Produits liés à chaque client de la plateforme</i></p>
-
-### Liste des Commandes
-<img src="screenshots/admin/all-commandes.png" width="230"/>
-<p><i>Gestion détaillée des commandes utilisateurs</i></p>
-
-### Liste des Utilisateurs
-<img src="screenshots/admin/users.png" width="230"/>
-<p><i>Gestion des comptes utilisateurs et rôles</i></p>
+| **Dashboard** | **Liste des Produits** | **Produits par Client** | **Liste des Commandes** | **Liste des Utilisateurs** |
+|---------------|------------------------|---------------------------|---------------------------|-------------------|
+| <img src="screenshots/admin/dashboard.png" width="220"/> | <img src="screenshots/admin/products.png" width="220"/> | <img src="screenshots/admin/product-client.png" width="220"/> | <img src="screenshots/admin/all-commandes.png" width="220"/> | <img src="screenshots/admin/users.png" width="220"/> |
 
 </div>
 
