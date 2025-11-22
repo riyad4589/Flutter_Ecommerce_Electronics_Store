@@ -425,26 +425,44 @@ Voir [AMELIORATIONS_UI_UX.md](AMELIORATIONS_UI_UX.md) pour plus de détails.
 
 ## 📱 Captures d'écran
 
-### Page de Lancement
+## 🚀 Page de Lancement
 
-| Écran d'Accueil |
-|-----------------|
-| ![Home](screenshots/home.png) |
+<div align="center">
+
+| **Écran d'Accueil** |
+|---------------------|
+| <img src="screenshots/home.png" width="250"/> |
+
 *Premier écran affiché au lancement de l'application*
 
-### Authentification
+</div>
 
-#### Utilisateur
+---
 
-| Inscription | Connexion Utilisateur |
-|-------------|------------------------|
-| ![Signup](screenshots/user/signup.png) | ![Login](screenshots/user/login-user.png) |
+## 🔐 Authentification
 
-#### Administrateur
+### 👤 Utilisateur
 
-|Connexion Administrateur|
-|------------------------|
-![Admin Login](screenshots/admin/admin-login.png)
+<div align="center">
+
+| **Inscription** | **Connexion Utilisateur** |
+|------------------|---------------------------|
+| <img src="screenshots/user/signup.png" width="230"/> | <img src="screenshots/user/login-user.png" width="230"/> |
+
+</div>
+
+---
+
+### 🛡️ Administrateur
+
+<div align="center">
+
+| **Connexion Administrateur** |
+|------------------------------|
+| <img src="screenshots/admin/admin-login.png" width="260"/> |
+
+</div>
+
 
 ## 🎨 Interface Utilisateur
 
@@ -462,7 +480,7 @@ Voir [AMELIORATIONS_UI_UX.md](AMELIORATIONS_UI_UX.md) pour plus de détails.
 
 <div align="center">
 
-| **Dashboard** | **Liste des Produits** | **Produits par Client** | **Liste des Commandes** | **Utilisateurs** |
+| **Dashboard** | **Liste des Produits** | **Produits par Client** | **Liste des Commandes** | **Liste des Utilisateurs** |
 |---------------|------------------------|---------------------------|---------------------------|-------------------|
 | <img src="screenshots/admin/dashboard.png" width="220"/> | <img src="screenshots/admin/products.png" width="220"/> | <img src="screenshots/admin/product-client.png" width="220"/> | <img src="screenshots/admin/all-commandes.png" width="220"/> | <img src="screenshots/admin/users.png" width="220"/> |
 
