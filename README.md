@@ -42,7 +42,6 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 - ✅ Gérer l'authentification et les sessions utilisateurs
 - ✅ Intégrer une base de données locale (SQLite)
 - ✅ Développer un panel d'administration complet
-- ✅ Assurer la persistance des données hors ligne
 
 ---
 
@@ -100,14 +99,6 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 - Gestion des produits (CRUD)
 - Gestion des catégories (CRUD)
 - Gestion des commandes
-- Visualisation de la base de données
-- Statistiques et métriques
-
-### 🎨 Expérience utilisateur
-- **Skeleton Loading** : Chargement élégant avec effet shimmer
-- **Animations fluides** : Animations staggered
-- **Design responsive** : Adapté à toutes les tailles d'écran
-- **Navigation intuitive** : Bottom navigation + GoRouter
 
 ---
 
