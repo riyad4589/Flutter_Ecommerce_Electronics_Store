@@ -1081,9 +1081,24 @@ Voir section "Base de données" dans le corps du rapport.
 
 Cette section présente les différentes interfaces de l'application avec des descriptions détaillées de chaque écran.
 
-#### 1. Authentification
+#### 1. Page de Lancement de l'Application
 
-##### 1.1 Inscription (signup.png)
+##### 1.1 Écran d'Accueil au Démarrage (home.png)
+
+![Accueil](screenshots/home.png)
+
+**Description :** Premier écran affiché au lancement de l'application. Interface de bienvenue moderne qui présente l'application et permet à l'utilisateur de choisir entre se connecter ou s'inscrire. Design attractif avec le logo de l'application, un slogan accrocheur et des boutons d'action clairs.
+
+**Fonctionnalités :**
+- Écran de bienvenue au démarrage
+- Bouton "Se connecter" pour les utilisateurs existants
+- Bouton "S'inscrire" pour les nouveaux utilisateurs
+- Animation de transition fluide
+- Design responsive et moderne
+
+#### 2. Authentification Utilisateur
+
+##### 2.1 Inscription (signup.png)
 
 ![Inscription](screenshots/signup.png)
 
@@ -1096,7 +1111,7 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Message d'erreur contextuel
 - Bouton d'inscription avec feedback visuel
 
-##### 1.2 Connexion Utilisateur (login-user.png)
+##### 2.2 Connexion Utilisateur (login-user.png)
 
 ![Connexion Utilisateur](screenshots/login-user.png)
 
@@ -1109,7 +1124,9 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Navigation vers l'inscription
 - Indicateur de chargement
 
-##### 1.3 Connexion Admin (admin-login.png)
+#### 3. Authentification Administrateur
+
+##### 3.1 Connexion Admin (admin-login.png)
 
 ![Connexion Admin](screenshots/admin-login.png)
 
@@ -1121,27 +1138,13 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Sécurité renforcée
 - Redirection automatique selon le rôle
 
-#### 2. Interface Utilisateur
+#### 4. Interface Utilisateur - Catalogue et Produits
 
-##### 2.1 Page d'Accueil (home.png)
+##### 4.1 Catalogue de Produits (products.png)
 
-![Accueil](screenshots/home.png)
+![Catalogue Produits](screenshots/products.png)
 
-**Description :** Écran d'accueil dynamique présentant les produits électroniques phares, les catégories principales et les promotions. Interface attractive avec skeleton loading pendant le chargement des données, cartes produits avec images optimisées et mise en cache.
-
-**Fonctionnalités :**
-- Carrousel de produits vedettes
-- Navigation par catégories (Smartphones, Ordinateurs, Tablettes, Audio, Photo/Vidéo, Gaming, Accessoires)
-- Recherche rapide
-- Filtres avancés
-- Accès au panier et profil
-- Skeleton loading pour une UX fluide
-
-##### 2.2 Liste des Produits (products.png)
-
-![Liste Produits](screenshots/products.png)
-
-**Description :** Vue catalogue complète affichant tous les produits électroniques disponibles avec filtrage et tri. Présentation en grille responsive avec images, prix, notes et badges de disponibilité. Chargement optimisé avec pagination virtuelle.
+**Description :** Vue catalogue complète affichant tous les produits électroniques disponibles avec filtrage et tri. Présentation en grille responsive avec images, prix, notes et badges de disponibilité. Interface utilisateur moderne permettant de parcourir facilement l'ensemble du catalogue.
 
 **Fonctionnalités :**
 - Affichage en grille responsive
@@ -1152,7 +1155,7 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Ajout aux favoris (icône cœur)
 - Navigation vers les détails
 
-##### 2.3 Détails du Produit (produits.png)
+##### 4.2 Détails du Produit (produits.png)
 
 ![Détails Produit](screenshots/produits.png)
 
@@ -1168,9 +1171,9 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Produits similaires
 - Partage du produit
 
-#### 3. Panier et Commandes
+#### 5. Interface Utilisateur - Panier et Commandes
 
-##### 3.1 Panier d'Achat (cart.png)
+##### 5.1 Panier d'Achat (cart.png)
 
 ![Panier](screenshots/cart.png)
 
@@ -1185,7 +1188,7 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Panier persistant
 - Animation des modifications
 
-##### 3.2 Historique des Commandes (commande.png)
+##### 5.2 Historique des Commandes (commande.png)
 
 ![Commandes](screenshots/commande.png)
 
@@ -1199,7 +1202,7 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Filtrage par statut
 - Recherche de commande
 
-##### 3.3 Suivi de Commande (suivi.png)
+##### 5.3 Suivi de Commande (suivi.png)
 
 ![Suivi Commande](screenshots/suivi.png)
 
@@ -1214,9 +1217,9 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Mode de paiement
 - Contact support
 
-#### 4. Profil Utilisateur
+#### 6. Interface Utilisateur - Profil
 
-##### 4.1 Profil (profile.png)
+##### 6.1 Profil (profile.png)
 
 ![Profil Utilisateur](screenshots/profile.png)
 
@@ -1230,9 +1233,9 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Paramètres de compte
 - Déconnexion
 
-#### 5. Panel d'Administration
+#### 7. Panel d'Administration
 
-##### 5.1 Dashboard Administrateur (dashboard.png)
+##### 7.1 Dashboard Administrateur (dashboard.png)
 
 ![Dashboard Admin](screenshots/dashboard.png)
 
@@ -1246,7 +1249,7 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Alertes importantes
 - Navigation rapide vers les sections
 
-##### 5.2 Gestion des Produits Admin (produits.png)
+##### 7.2 Gestion des Produits Admin (produits.png)
 
 ![Gestion Produits](screenshots/produits.png)
 
@@ -1262,7 +1265,7 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Gestion des stocks
 - Activation/Désactivation
 
-##### 5.3 Produits par Client (product-client.png)
+##### 7.3 Produits par Client (product-client.png)
 
 ![Produits par Client](screenshots/product-client.png)
 
@@ -1276,7 +1279,7 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Filtrage et recherche
 - Export des données
 
-##### 5.4 Toutes les Commandes (all-commandes.png)
+##### 7.4 Toutes les Commandes (all-commandes.png)
 
 ![Toutes les Commandes](screenshots/all-commandes.png)
 
@@ -1292,7 +1295,7 @@ Cette section présente les différentes interfaces de l'application avec des de
 - Export des données
 - Statistiques globales
 
-##### 5.5 Gestion des Utilisateurs (users.png)
+##### 7.5 Gestion des Utilisateurs (users.png)
 
 ![Gestion Utilisateurs](screenshots/users.png)
 

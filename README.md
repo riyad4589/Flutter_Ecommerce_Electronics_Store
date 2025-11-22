@@ -492,35 +492,46 @@ Voir [AMELIORATIONS_UI_UX.md](AMELIORATIONS_UI_UX.md) pour plus de détails.
 
 ## 📱 Captures d'écran
 
+### Page de Lancement
+
+| Écran d'Accueil |
+|-----------------|
+| ![Home](screenshots/home.png) |
+*Premier écran affiché au lancement de l'application*
+
 ### Authentification
 
-| Inscription | Connexion Utilisateur | Connexion Admin |
-|------------|----------------------|-----------------|
-| ![Signup](screenshots/signup.png) | ![Login](screenshots/login-user.png) | ![Admin Login](screenshots/admin-login.png) |
+#### Utilisateur
+
+| Inscription | Connexion Utilisateur |
+|------------|----------------------|
+| ![Signup](screenshots/signup.png) | ![Login](screenshots/login-user.png) |
+
+#### Administrateur
+
+| Connexion Admin |
+|-----------------|
+| ![Admin Login](screenshots/admin-login.png) |
 
 ### Interface Utilisateur
 
-| Accueil | Produits | Détails Produit |
-|---------|----------|----------------|
-| ![Home](screenshots/home.png) | ![Products](screenshots/products.png) | ![Produits](screenshots/produits.png) |
+| Catalogue Produits | Détails Produit | Panier |
+|-------------------|----------------|--------|
+| ![Products](screenshots/products.png) | ![Produits](screenshots/produits.png) | ![Cart](screenshots/cart.png) |
 
-### Panier et Commandes
+| Commandes | Suivi Commande | Profil |
+|-----------|----------------|--------|
+| ![Commande](screenshots/commande.png) | ![Suivi](screenshots/suivi.png) | ![Profile](screenshots/profile.png) |
 
-| Panier | Commandes | Suivi Commande |
-|--------|-----------|----------------|
-| ![Cart](screenshots/cart.png) | ![Commande](screenshots/commande.png) | ![Suivi](screenshots/suivi.png) |
+### Panel d'Administration
 
-### Profil
+| Dashboard Admin | Gestion Produits |
+|----------------|------------------|
+| ![Dashboard](screenshots/dashboard.png) | ![Products Admin](screenshots/produits.png) |
 
-| Profil Utilisateur |
-|-------------------|
-| ![Profile](screenshots/profile.png) |
-
-### Administration
-
-| Dashboard Admin | Gestion Produits | Produits par Client | Toutes les Commandes | Gestion Utilisateurs |
-|----------------|------------------|---------------------|---------------------|---------------------|
-| ![Dashboard](screenshots/dashboard.png) | ![Products Admin](screenshots/produits.png) | ![Product Client](screenshots/product-client.png) | ![All Orders](screenshots/all-commandes.png) | ![Users](screenshots/users.png) |
+| Produits par Client | Toutes les Commandes | Gestion Utilisateurs |
+|---------------------|---------------------|---------------------|
+| ![Product Client](screenshots/product-client.png) | ![All Orders](screenshots/all-commandes.png) | ![Users](screenshots/users.png) |
 
 ---
 
