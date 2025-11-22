@@ -25,8 +25,15 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 - [Configuration](#-configuration)
 - [Utilisation](#-utilisation)
 - [Structure du projet](#-structure-du-projet)
+- [Base de données](#-base-de-données)
 - [API Mock](#-api-mock)
+- [Tests](#-tests)
+- [Améliorations UI/UX](#-améliorations-uiux)
 - [Captures d'écran](#-captures-décran)
+- [Roadmap](#-roadmap)
+- [Contribution](#-contribution)
+- [Licence](#-licence)
+- [Contact](#-contact)
 
 ---
 
@@ -93,6 +100,7 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 - Modification des informations
 - Changement de mot de passe
 - Gestion de photo de profil
+- Historique d'activité
 
 ### ⚙️ Administration
 - Dashboard administrateur complet
@@ -105,9 +113,11 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 
 ### 🎨 Expérience utilisateur
 - **Skeleton Loading** : Chargement élégant avec effet shimmer
-- **Animations fluides** : Animations staggered
+- **Pull-to-Refresh** : Actualisation intuitive
+- **Animations fluides** : Transitions et animations staggered
+- **Mode sombre** : Thème clair/sombre adaptatif
 - **Design responsive** : Adapté à toutes les tailles d'écran
-- **Navigation intuitive** : Bottom navigation + GoRouter
+- **Navigation intuitive** : Bottom navigation + routes nommées
 
 ---
 
@@ -221,6 +231,15 @@ flutter run
 flutter run --release
 ```
 
+### Plateformes supportées
+
+✅ Android  
+✅ iOS  
+✅ Web (en développement)  
+✅ Windows (en développement)  
+✅ macOS (en développement)  
+✅ Linux (en développement)
+
 ---
 
 ## ⚙️ Configuration
@@ -228,8 +247,18 @@ flutter run --release
 ### Base de données
 
 La base de données SQLite est automatiquement initialisée au premier lancement avec :
+- **Version actuelle** : 6
 - **Nom du fichier** : `ecommerce.db`
-- **Tables** : users, products, categories, cart_items, orders, order_items, favorites, addresses
+- **Tables** : users, products, categories, cart_items, orders, favorites, auth_tokens, addresses
+
+### Variables d'environnement
+
+Créer un fichier `.env` à la racine du projet (optionnel pour API externe) :
+
+```env
+API_BASE_URL=https://votre-api.com
+API_KEY=votre_cle_api
+```
 
 ### Configuration Mock API (pour développement)
 
@@ -249,25 +278,33 @@ L'API mock sera disponible sur `http://localhost:3000`
 
 ### Connexion test
 
+Pour tester l'application, utilisez les identifiants suivants :
+
 **Utilisateur standard :**
-- Créez un nouveau compte via la page d'inscription
+- Créer un nouveau utilisateur
 
 **Administrateur :**
 - Email : `admin`
 - Mot de passe : `admin123`
 
-### Pages principales
+### Navigation principale
 
-L'application comprend les sections suivantes :
+L'application dispose de 4 sections principales accessibles via la navigation en bas :
 
-- **Accueil** - Page de lancement
-- **Authentification** - Inscription et connexion
-- **Produits** - Catalogue et détails des produits électroniques
-- **Panier** - Gestion du panier d'achat
-- **Commandes** - Historique et suivi des commandes
-- **Favoris** - Produits favoris
-- **Profil** - Informations utilisateur et paramètres
-- **Dashboard Admin** - Panel d'administration (accessible via le profil admin)
+1. **🏠 Accueil** - Catégories et produits mis en avant
+2. **🔍 Explorer** - Catalogue complet avec filtres
+3. **🛒 Panier** - Gestion du panier d'achat
+4. **👤 Profil** - Compte utilisateur et paramètres
+
+### Fonctionnalités administrateur
+
+Accessible via le menu du profil > "Admin Dashboard" (si connecté en tant qu'admin) :
+
+- Gestion complète des produits
+- Gestion des utilisateurs
+- Gestion des catégories
+- Suivi des commandes
+- Visualisation de la base de données
 
 ---
 
@@ -294,53 +331,92 @@ online-shop/
 │   ├── injection_container.dart  # DI setup
 │   └── main.dart            # Point d'entrée
 │
-├── test/                      # Tests
+├── test/                      # Tests unitaires et widgets
 ├── api_mock/                  # Serveur API mock (Node.js)
-├── screenshots/               # Captures d'écran
+├── scripts/                   # Scripts utilitaires
 │
 ├── pubspec.yaml              # Dépendances Flutter
 ├── analysis_options.yaml     # Règles d'analyse Dart
 ├── README.md                 # Ce fichier
-└── RAPPORT.md                # Rapport de projet
+├── RAPPORT.md                # Rapport de projet
+└── AMELIORATIONS_UI_UX.md   # Documentation UI/UX
 ```
 
 ## 🌐 API Mock
 
-Un serveur Node.js est fourni pour le développement local dans le dossier `api_mock/`.
-
-### Démarrage
-
-```bash
-cd api_mock
-npm install
-npm start
-```
-
-Le serveur démarre sur `http://localhost:3000`
+Un serveur Node.js est fourni pour le développement local :
 
 ### Endpoints disponibles
 
-**Authentification**
-- `POST /api/v1/auth/register` - Inscription
-- `POST /api/v1/auth/login` - Connexion
+```
+GET    /api/products          # Liste des produits
+GET    /api/products/:id      # Détails d'un produit
+POST   /api/products          # Créer un produit
+PUT    /api/products/:id      # Modifier un produit
+DELETE /api/products/:id      # Supprimer un produit
 
-**Produits**
-- `GET /api/v1/products` - Liste des produits
-- `GET /api/v1/products/:id` - Détails d'un produit
-- `GET /api/v1/categories` - Liste des catégories
+POST   /api/auth/login        # Connexion
+POST   /api/auth/register     # Inscription
+POST   /api/auth/logout       # Déconnexion
 
-**Panier** (authentification requise)
-- `GET /api/v1/cart` - Récupérer le panier
-- `POST /api/v1/cart/add` - Ajouter un produit
+GET    /api/categories        # Liste des catégories
+GET    /api/orders            # Liste des commandes
+POST   /api/orders            # Créer une commande
+```
 
-**Commandes** (authentification requise)
-- `GET /api/v1/orders` - Historique des commandes
-- `POST /api/v1/orders` - Créer une commande
+---
 
-### Utilisation depuis émulateur
+## 🧪 Tests
 
-- **Android** : Utiliser `http://10.0.2.2:3000`
-- **iOS** : Utiliser `http://localhost:3000`
+### Lancer les tests
+
+```bash
+# Tests unitaires
+flutter test
+
+# Tests avec couverture
+flutter test --coverage
+
+# Tests d'intégration
+flutter test integration_test/
+```
+
+### Types de tests
+
+- ✅ Tests unitaires (domain, data)
+- ✅ Tests de widgets (UI)
+- 🔄 Tests d'intégration (en cours)
+- 🔄 Tests E2E (à venir)
+
+---
+
+## 🎨 Améliorations UI/UX
+
+### Implémentées récemment
+
+✅ **Skeleton Loading**
+- Chargement élégant avec effet shimmer
+- 5 types de skeletons réutilisables
+- Améliore la perception de performance
+
+✅ **Pull to Refresh**
+- Actualisation intuitive sur toutes les listes
+- Feedback visuel clair
+
+✅ **Animations fluides**
+- Animations staggered sur les listes
+- Transitions de page fluides
+- Micro-interactions sur les boutons
+
+✅ **Mode sombre**
+- Thème adaptatif automatique
+- Basculement manuel disponible
+
+### En développement
+
+🔄 **Infinite Scroll** - Chargement automatique en défilement  
+🔄 **Animations de page** - Transitions personnalisées  
+🔄 **Haptic Feedback** - Retour tactile sur interactions
 
 ---
 
