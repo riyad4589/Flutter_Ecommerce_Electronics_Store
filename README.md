@@ -401,9 +401,6 @@ Le serveur démarre sur `http://localhost:3000`
 
 ---
 
-<div align="center">
-
-
 # 👤 Contributeurs
 
 **MAJGHIROU Mohamed Riyad**
@@ -419,6 +416,9 @@ Le serveur démarre sur `http://localhost:3000`
 - Email: [azzam.moo10@gmail.com](mailto:azzam.moo10@gmail.com)
 - LinkedIn: [Mohamed AZZAM](https://www.linkedin.com/in/mohamed-azzam-93115823a/)
 
+---
+
+<div align="center">
 
 ### ⭐ Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile !
 
