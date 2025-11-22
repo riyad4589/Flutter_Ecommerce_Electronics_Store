@@ -446,27 +446,28 @@ Voir [AMELIORATIONS_UI_UX.md](AMELIORATIONS_UI_UX.md) pour plus de détails.
 |------------------------|
 ![Admin Login](screenshots/admin/admin-login.png)
 
-### Interface Utilisateur
+## 🎨 Interface Utilisateur
 
-|Liste des Produits| Panier | Commandes | Suivre la commande | Profile |
-|------------------|--------|-----------|--------------------|---------|
+<div align="center">
 
-| ![Produits](screenshots/user/produits.png) |
-![Cart](screenshots/user/cart.png) |
-![Commande](screenshots/user/commande.png) |
-![Suivi](screenshots/user/suivi.png) |
-![Profile](screenshots/user/profile.png) |
+| **Liste des Produits** | **Panier** | **Commandes** | **Suivi de commande** | **Profil** |
+|------------------------|------------|----------------|-------------------------|------------|
+| <img src="screenshots/user/produits.png" width="180"/> | <img src="screenshots/user/cart.png" width="180"/> | <img src="screenshots/user/commande.png" width="180"/> | <img src="screenshots/user/suivi.png" width="180"/> | <img src="screenshots/user/profile.png" width="180"/> |
 
-### Panel d'Administration
+</div>
 
-|Dashboard | Liste des Produits | Produits par client | Liste des commandes | Liste des Utilisateur |
-|----------|--------------------|---------------------|---------------------|-----------------------|
+---
 
-![Dashboard](screenshots/admin/dashboard.png)
-![Products Admin](screenshots/admin/products.png)
-![Product Client](screenshots/admin/product-client.png)
-![All Orders](screenshots/admin/all-commandes.png)
-![Users](screenshots/admin/users.png)
+## 🛠️ Panel d’Administration
+
+<div align="center">
+
+| **Dashboard** | **Liste des Produits** | **Produits par Client** | **Liste des Commandes** | **Utilisateurs** |
+|---------------|------------------------|---------------------------|---------------------------|-------------------|
+| <img src="screenshots/admin/dashboard.png" width="220"/> | <img src="screenshots/admin/products.png" width="220"/> | <img src="screenshots/admin/product-client.png" width="220"/> | <img src="screenshots/admin/all-commandes.png" width="220"/> | <img src="screenshots/admin/users.png" width="220"/> |
+
+</div>
+
 
 ---
 
