@@ -20,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -100,9 +101,22 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _passwordController,
                   labelText: 'Mot de passe',
                   hintText: 'Entrez votre mot de passe',
-                  obscureText: true,
+                  obscureText: _obscurePassword,
                   validator: Validator.validatePassword,
                   prefixIcon: Icons.lock,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.textSecondary,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Consumer<AuthProvider>(

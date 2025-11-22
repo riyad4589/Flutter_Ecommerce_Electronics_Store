@@ -26,6 +26,8 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
   final ImagePicker _picker = ImagePicker();
   File? _profileImage;
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
@@ -137,6 +139,10 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inscription'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.goNamed(AppRoute.login.name),
+        ),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -207,16 +213,29 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: _passwordController,
                   labelText: 'Mot de passe',
                   hintText: 'Choisissez un mot de passe',
-                  obscureText: true,
+                  obscureText: _obscurePassword,
                   validator: Validator.validatePassword,
                   prefixIcon: Icons.lock,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.textSecondary,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(
                   controller: _confirmPasswordController,
                   labelText: 'Confirmer le mot de passe',
                   hintText: 'Confirmez votre mot de passe',
-                  obscureText: true,
+                  obscureText: _obscureConfirmPassword,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Veuillez confirmer votre mot de passe';
@@ -227,6 +246,19 @@ class _RegisterPageState extends State<RegisterPage> {
                     return null;
                   },
                   prefixIcon: Icons.lock_reset,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureConfirmPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      color: AppColors.textSecondary,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                      });
+                    },
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Consumer<AuthProvider>(

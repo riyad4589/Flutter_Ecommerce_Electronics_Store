@@ -6,9 +6,9 @@
 
 | Élément | Description |
 |---------|-------------|
-| **Titre du projet** | Online Shop - Application E-commerce Mobile |
+| **Titre du projet** | Electronics Store - Application E-commerce Électronique Mobile |
 | **Plateforme** | Flutter / Dart |
-| **Type** | Application mobile multiplateforme |
+| **Type** | Application mobile multiplateforme spécialisée en électronique |
 | **Date de début** | [Date de début] |
 | **Date de fin** | 22 novembre 2025 |
 | **Version actuelle** | 1.0.0 |
@@ -20,7 +20,7 @@
 
 ### Objectif du projet
 
-Développer une application e-commerce mobile complète et fonctionnelle utilisant Flutter, permettant aux utilisateurs de parcourir des produits, gérer leur panier, passer des commandes et administrer la plateforme. Le projet met en œuvre les meilleures pratiques de développement mobile avec une architecture Clean Architecture et une expérience utilisateur moderne.
+Développer une application e-commerce mobile spécialisée dans la vente de produits électroniques, utilisant Flutter, permettant aux utilisateurs de parcourir des produits high-tech (smartphones, ordinateurs, tablettes, audio, photo/vidéo, gaming, accessoires), gérer leur panier, passer des commandes et administrer la plateforme. Le projet met en œuvre les meilleures pratiques de développement mobile avec une architecture Clean Architecture et une expérience utilisateur moderne.
 
 ### Résultats clés
 
@@ -37,11 +37,11 @@ Développer une application e-commerce mobile complète et fonctionnelle utilisa
 
 ### Contexte
 
-Dans le cadre du programme universitaire, ce projet vise à démontrer la maîtrise du développement d'applications mobiles avec Flutter. L'e-commerce étant un secteur en pleine croissance, il représente un cas d'usage idéal pour appliquer les concepts de développement mobile moderne.
+Dans le cadre du programme universitaire, ce projet vise à démontrer la maîtrise du développement d'applications mobiles avec Flutter. L'e-commerce de produits électroniques étant un secteur en pleine croissance, il représente un cas d'usage idéal pour appliquer les concepts de développement mobile moderne, notamment la gestion de catalogues complexes avec spécifications techniques détaillées.
 
 ### Problématique
 
-**Comment développer une application e-commerce mobile complète, performante et maintenable qui offre une expérience utilisateur fluide tout en respectant les principes d'architecture logicielle ?**
+**Comment développer une application e-commerce mobile spécialisée en électronique, complète, performante et maintenable qui offre une expérience utilisateur fluide avec des catalogues de produits techniques détaillés tout en respectant les principes d'architecture logicielle ?**
 
 ### Enjeux
 
@@ -1077,9 +1077,240 @@ Voir fichier [README.md](README.md) pour la structure détaillée.
 
 Voir section "Base de données" dans le corps du rapport.
 
-### Annexe C : Captures d'écran
+### Annexe C : Captures d'écran détaillées
 
-Les captures d'écran sont disponibles dans le dossier `/screenshots`.
+Cette section présente les différentes interfaces de l'application avec des descriptions détaillées de chaque écran.
+
+#### 1. Authentification
+
+##### 1.1 Inscription (signup.png)
+
+![Inscription](screenshots/signup.png)
+
+**Description :** Interface d'inscription permettant aux nouveaux utilisateurs de créer un compte. L'écran présente un formulaire avec validation en temps réel des champs (nom, email, mot de passe). Le design moderne utilise les Material Design 3 guidelines avec un thème cohérent et des animations fluides lors de la saisie.
+
+**Fonctionnalités :**
+- Validation des champs en temps réel
+- Vérification de la force du mot de passe
+- Format email validé
+- Message d'erreur contextuel
+- Bouton d'inscription avec feedback visuel
+
+##### 1.2 Connexion Utilisateur (login-user.png)
+
+![Connexion Utilisateur](screenshots/login-user.png)
+
+**Description :** Page de connexion pour les utilisateurs. Interface épurée avec champs email et mot de passe, option "Se souvenir de moi" et gestion des erreurs d'authentification. Le design responsive s'adapte à toutes les tailles d'écran.
+
+**Fonctionnalités :**
+- Connexion sécurisée
+- Persistance de session
+- Récupération des erreurs
+- Navigation vers l'inscription
+- Indicateur de chargement
+
+##### 1.3 Connexion Admin (admin-login.png)
+
+![Connexion Admin](screenshots/admin-login.png)
+
+**Description :** Interface de connexion dédiée aux administrateurs avec un design différencié pour marquer la séparation entre les espaces utilisateur et administration. Accès sécurisé au panel d'administration.
+
+**Fonctionnalités :**
+- Authentification administrateur
+- Vérification des privilèges
+- Sécurité renforcée
+- Redirection automatique selon le rôle
+
+#### 2. Interface Utilisateur
+
+##### 2.1 Page d'Accueil (home.png)
+
+![Accueil](screenshots/home.png)
+
+**Description :** Écran d'accueil dynamique présentant les produits électroniques phares, les catégories principales et les promotions. Interface attractive avec skeleton loading pendant le chargement des données, cartes produits avec images optimisées et mise en cache.
+
+**Fonctionnalités :**
+- Carrousel de produits vedettes
+- Navigation par catégories (Smartphones, Ordinateurs, Tablettes, Audio, Photo/Vidéo, Gaming, Accessoires)
+- Recherche rapide
+- Filtres avancés
+- Accès au panier et profil
+- Skeleton loading pour une UX fluide
+
+##### 2.2 Liste des Produits (products.png)
+
+![Liste Produits](screenshots/products.png)
+
+**Description :** Vue catalogue complète affichant tous les produits électroniques disponibles avec filtrage et tri. Présentation en grille responsive avec images, prix, notes et badges de disponibilité. Chargement optimisé avec pagination virtuelle.
+
+**Fonctionnalités :**
+- Affichage en grille responsive
+- Tri par prix, popularité, notes
+- Filtres multiples (catégorie, prix, marque)
+- Recherche en temps réel
+- Ajout rapide au panier
+- Ajout aux favoris (icône cœur)
+- Navigation vers les détails
+
+##### 2.3 Détails du Produit (produits.png)
+
+![Détails Produit](screenshots/produits.png)
+
+**Description :** Page détaillée d'un produit présentant toutes les informations techniques : spécifications complètes, images multiples avec zoom, description détaillée, avis clients avec système de notation, prix et disponibilité. Interface immersive pour une expérience d'achat optimale.
+
+**Fonctionnalités :**
+- Galerie d'images avec zoom
+- Spécifications techniques détaillées
+- Système d'avis et notes (étoiles)
+- Sélection de quantité
+- Ajout au panier avec animation
+- Ajout aux favoris
+- Produits similaires
+- Partage du produit
+
+#### 3. Panier et Commandes
+
+##### 3.1 Panier d'Achat (cart.png)
+
+![Panier](screenshots/cart.png)
+
+**Description :** Interface de panier présentant les articles sélectionnés avec possibilité de modifier les quantités, supprimer des produits et voir le récapitulatif total. Calcul automatique des montants avec animations lors des modifications.
+
+**Fonctionnalités :**
+- Liste des articles avec images
+- Modification des quantités (+/-)
+- Suppression d'articles avec confirmation
+- Calcul dynamique du total
+- Bouton "Passer commande"
+- Panier persistant
+- Animation des modifications
+
+##### 3.2 Historique des Commandes (commande.png)
+
+![Commandes](screenshots/commande.png)
+
+**Description :** Liste complète des commandes passées par l'utilisateur avec statuts en temps réel (En cours, Livrée, Annulée). Chaque commande affiche le numéro, la date, le montant total et les produits commandés.
+
+**Fonctionnalités :**
+- Historique complet
+- Statut de chaque commande
+- Détails de commande
+- Bouton d'annulation (si applicable)
+- Filtrage par statut
+- Recherche de commande
+
+##### 3.3 Suivi de Commande (suivi.png)
+
+![Suivi Commande](screenshots/suivi.png)
+
+**Description :** Écran de suivi détaillé d'une commande spécifique montrant l'évolution du statut avec timeline visuelle, informations de livraison et produits commandés. Interface claire et informative.
+
+**Fonctionnalités :**
+- Timeline de statut
+- Informations de livraison
+- Liste des produits
+- Montant total
+- Adresse de livraison
+- Mode de paiement
+- Contact support
+
+#### 4. Profil Utilisateur
+
+##### 4.1 Profil (profile.png)
+
+![Profil Utilisateur](screenshots/profile.png)
+
+**Description :** Page de profil personnel permettant de consulter et modifier les informations du compte (nom, email, téléphone, adresse). Interface moderne avec avatar, statistiques (commandes, favoris) et options de compte.
+
+**Fonctionnalités :**
+- Modification des informations
+- Upload de photo de profil
+- Statistiques utilisateur
+- Historique d'activité
+- Paramètres de compte
+- Déconnexion
+
+#### 5. Panel d'Administration
+
+##### 5.1 Dashboard Administrateur (dashboard.png)
+
+![Dashboard Admin](screenshots/dashboard.png)
+
+**Description :** Tableau de bord d'administration présentant les statistiques clés de la plateforme : nombre d'utilisateurs, produits, commandes, revenus. Graphiques interactifs et indicateurs de performance pour un suivi en temps réel de l'activité.
+
+**Fonctionnalités :**
+- Statistiques en temps réel
+- Graphiques de performance
+- Indicateurs KPI (Revenus, Commandes, Utilisateurs, Produits)
+- Activité récente
+- Alertes importantes
+- Navigation rapide vers les sections
+
+##### 5.2 Gestion des Produits Admin (produits.png)
+
+![Gestion Produits](screenshots/produits.png)
+
+**Description :** Interface d'administration pour gérer le catalogue de produits électroniques. Tableau complet avec toutes les informations produits, possibilité de créer, modifier, supprimer des produits. Recherche et filtrage avancés pour faciliter la gestion de grands catalogues.
+
+**Fonctionnalités :**
+- Liste complète des produits
+- Ajout de nouveau produit
+- Modification des détails
+- Suppression avec confirmation
+- Gestion des catégories
+- Upload d'images multiples
+- Gestion des stocks
+- Activation/Désactivation
+
+##### 5.3 Produits par Client (product-client.png)
+
+![Produits par Client](screenshots/product-client.png)
+
+**Description :** Vue administrative permettant de voir les produits achetés par chaque client. Analyse détaillée des habitudes d'achat et historique des achats par utilisateur pour optimiser les recommandations et le service client.
+
+**Fonctionnalités :**
+- Liste des clients
+- Historique d'achat par client
+- Produits favoris du client
+- Statistiques d'achat
+- Filtrage et recherche
+- Export des données
+
+##### 5.4 Toutes les Commandes (all-commandes.png)
+
+![Toutes les Commandes](screenshots/all-commandes.png)
+
+**Description :** Interface administrative centralisée pour gérer toutes les commandes de la plateforme. Vue d'ensemble avec filtres par statut, date, montant. Possibilité de modifier les statuts, consulter les détails et gérer les livraisons.
+
+**Fonctionnalités :**
+- Liste exhaustive des commandes
+- Filtrage par statut (En cours, Livrée, Annulée)
+- Recherche par numéro/client
+- Tri par date, montant
+- Modification de statut
+- Détails complets de commande
+- Export des données
+- Statistiques globales
+
+##### 5.5 Gestion des Utilisateurs (users.png)
+
+![Gestion Utilisateurs](screenshots/users.png)
+
+**Description :** Panel d'administration des utilisateurs permettant de voir tous les comptes enregistrés, leurs informations, statistiques d'achat et activité. Possibilité de gérer les rôles, désactiver des comptes et consulter l'historique.
+
+**Fonctionnalités :**
+- Liste de tous les utilisateurs
+- Détails du profil utilisateur
+- Statistiques par utilisateur (commandes, montant dépensé)
+- Gestion des rôles (Admin/User)
+- Désactivation de comptes
+- Recherche et filtrage
+- Historique d'activité
+- Export des données utilisateurs
+
+---
+
+**Note :** Toutes les captures d'écran sont disponibles en haute résolution dans le dossier `screenshots/` du projet.
 
 ### Annexe D : Code source
 

@@ -1264,21 +1264,78 @@ class ProductsByClientTab extends StatefulWidget {
 }
 
 class _ProductsByClientTabState extends State<ProductsByClientTab> {
+  List<Map<String, dynamic>> _orders = [];
+  Map<String, String> _userNames = {};
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final ordersProvider =
-          Provider.of<OrdersProvider>(context, listen: false);
-      ordersProvider.loadOrders();
-    });
+    _loadAllOrders();
+  }
+
+  Future<void> _loadAllOrders() async {
+    setState(() => _isLoading = true);
+    try {
+      final db = await DatabaseHelper.instance.database;
+
+      // Charger toutes les commandes
+      final ordersData = await db.query('orders', orderBy: 'created_at DESC');
+
+      // Charger les informations utilisateurs
+      final users = await db.query('users');
+      final userMap = {
+        for (var user in users) user['id'] as String: user['name'] as String
+      };
+
+      // Pour chaque commande, charger les items
+      List<Map<String, dynamic>> ordersWithItems = [];
+      for (var order in ordersData) {
+        final items = await db.query(
+          'order_items',
+          where: 'order_id = ?',
+          whereArgs: [order['id']],
+        );
+
+        // Charger les détails des produits pour chaque item
+        List<Map<String, dynamic>> itemsWithProducts = [];
+        for (var item in items) {
+          final product = await db.query(
+            'products',
+            where: 'id = ?',
+            whereArgs: [item['product_id']],
+          );
+          if (product.isNotEmpty) {
+            itemsWithProducts.add({
+              'quantity': item['quantity'],
+              'product': product.first,
+            });
+          }
+        }
+
+        ordersWithItems.add({
+          ...order,
+          'items': itemsWithProducts,
+        });
+      }
+
+      setState(() {
+        _orders = ordersWithItems;
+        _userNames = userMap;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur: $e')),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final ordersProvider = Provider.of<OrdersProvider>(context);
-    final authProvider = Provider.of<AuthProvider>(context);
-
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
@@ -1311,7 +1368,7 @@ class _ProductsByClientTabState extends State<ProductsByClientTab> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${ordersProvider.orders.length} commande(s)',
+                      '${_orders.length} commande(s)',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context)
                                 .colorScheme
@@ -1337,221 +1394,236 @@ class _ProductsByClientTabState extends State<ProductsByClientTab> {
             ),
           ),
           Expanded(
-            child: ordersProvider.orders.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.shopping_cart_outlined,
-                          size: 64,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.3),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Aucune commande trouvée',
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _orders.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.shopping_cart_outlined,
+                              size: 64,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.3),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Aucune commande trouvée',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurface
                                         .withOpacity(0.6),
                                   ),
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(24.0),
-                    itemCount: ordersProvider.orders.length,
-                    itemBuilder: (context, index) {
-                      final order = ordersProvider.orders[index];
-                      return Card(
-                        elevation: 0,
-                        margin: const EdgeInsets.only(bottom: 16.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .outline
-                                .withOpacity(0.2),
-                            width: 1,
-                          ),
-                        ),
-                        child: ExpansionTile(
-                          leading: Container(
-                            width: 56,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Theme.of(context).colorScheme.primary,
-                                  Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
-                                ],
-                              ),
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
                             ),
-                            child: Center(
-                              child: Text(
-                                authProvider.user?.name[0].toUpperCase() ?? 'U',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          title: Text(
-                            authProvider.user?.name ?? 'Utilisateur',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text('Commande #${order.id}'),
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(16.0),
-                              decoration: BoxDecoration(
+                          ],
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(24.0),
+                        itemCount: _orders.length,
+                        itemBuilder: (context, index) {
+                          final order = _orders[index];
+                          final userName =
+                              _userNames[order['user_id']] ?? 'Utilisateur';
+                          return Card(
+                            elevation: 0,
+                            margin: const EdgeInsets.only(bottom: 16.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .surfaceVariant
-                                    .withOpacity(0.3),
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(16),
-                                  bottomRight: Radius.circular(16),
-                                ),
+                                    .outline
+                                    .withOpacity(0.2),
+                                width: 1,
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.shopping_bag_outlined,
-                                        size: 20,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      const Text(
-                                        'Produits commandés:',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
+                            ),
+                            child: ExpansionTile(
+                              leading: Container(
+                                width: 56,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Theme.of(context).colorScheme.primary,
+                                      Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withOpacity(0.7),
                                     ],
                                   ),
-                                  const SizedBox(height: 12),
-                                  ...order.items.map((item) {
-                                    return Container(
-                                      margin: const EdgeInsets.only(bottom: 8),
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .surface,
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline
-                                              .withOpacity(0.2),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            width: 8,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              shape: BoxShape.circle,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          Expanded(
-                                            child: Text(
-                                              '${item.product.name} x${item.quantity}',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            '\$${item.product.price.toStringAsFixed(2)}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList(),
-                                  const SizedBox(height: 12),
-                                  const Divider(),
-                                  const SizedBox(height: 12),
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .primaryContainer
+                                          .primary
                                           .withOpacity(0.3),
-                                      borderRadius: BorderRadius.circular(8),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text(
-                                          'Total:',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                        Text(
-                                          '\$${order.totalAmount.toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
+                                  ],
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    userName[0].toUpperCase(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                userName,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text('Commande #${order['id']}'),
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(16.0),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceVariant
+                                        .withOpacity(0.3),
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(16),
+                                      bottomRight: Radius.circular(16),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.shopping_bag_outlined,
+                                            size: 20,
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
                                           ),
+                                          const SizedBox(width: 8),
+                                          const Text(
+                                            'Produits commandés:',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+                                      ...(order['items'] as List).map((item) {
+                                        final product = item['product']
+                                            as Map<String, dynamic>;
+                                        final quantity =
+                                            item['quantity'] as int;
+                                        return Container(
+                                          margin:
+                                              const EdgeInsets.only(bottom: 8),
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .surface,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outline
+                                                  .withOpacity(0.2),
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                width: 8,
+                                                height: 8,
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Text(
+                                                  '${product['name']} x$quantity',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                '${product['price']} MAD',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
+                                      const SizedBox(height: 12),
+                                      const Divider(),
+                                      const SizedBox(height: 12),
+                                      Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primaryContainer
+                                              .withOpacity(0.3),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
-                                      ],
-                                    ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Total:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${order['total_amount']} MAD',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                          );
+                        },
+                      ),
           ),
         ],
       ),
@@ -1568,14 +1640,74 @@ class AllOrdersTab extends StatefulWidget {
 }
 
 class _AllOrdersTabState extends State<AllOrdersTab> {
+  List<Map<String, dynamic>> _orders = [];
+  Map<String, String> _userNames = {};
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final ordersProvider =
-          Provider.of<OrdersProvider>(context, listen: false);
-      ordersProvider.loadOrders();
-    });
+    _loadAllOrders();
+  }
+
+  Future<void> _loadAllOrders() async {
+    setState(() => _isLoading = true);
+    try {
+      final db = await DatabaseHelper.instance.database;
+
+      // Charger toutes les commandes
+      final ordersData = await db.query('orders', orderBy: 'created_at DESC');
+
+      // Charger les informations utilisateurs
+      final users = await db.query('users');
+      final userMap = {
+        for (var user in users) user['id'] as String: user['name'] as String
+      };
+
+      // Pour chaque commande, charger les items
+      List<Map<String, dynamic>> ordersWithItems = [];
+      for (var order in ordersData) {
+        final items = await db.query(
+          'order_items',
+          where: 'order_id = ?',
+          whereArgs: [order['id']],
+        );
+
+        // Charger les détails des produits pour chaque item
+        List<Map<String, dynamic>> itemsWithProducts = [];
+        for (var item in items) {
+          final product = await db.query(
+            'products',
+            where: 'id = ?',
+            whereArgs: [item['product_id']],
+          );
+          if (product.isNotEmpty) {
+            itemsWithProducts.add({
+              'quantity': item['quantity'],
+              'product': product.first,
+            });
+          }
+        }
+
+        ordersWithItems.add({
+          ...order,
+          'items': itemsWithProducts,
+        });
+      }
+
+      setState(() {
+        _orders = ordersWithItems;
+        _userNames = userMap;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur: $e')),
+        );
+      }
+    }
   }
 
   Color _getStatusColor(String status) {
@@ -1614,9 +1746,6 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
 
   @override
   Widget build(BuildContext context) {
-    final ordersProvider = Provider.of<OrdersProvider>(context);
-    final authProvider = Provider.of<AuthProvider>(context);
-
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
@@ -1649,7 +1778,7 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${ordersProvider.orders.length} commande(s) totale(s)',
+                      '${_orders.length} commande(s) totale(s)',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context)
                                 .colorScheme
@@ -1675,246 +1804,267 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
             ),
           ),
           Expanded(
-            child: ordersProvider.orders.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.receipt_long_outlined,
-                          size: 64,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.3),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Aucune commande disponible',
-                          style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _orders.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.receipt_long_outlined,
+                              size: 64,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.3),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Aucune commande disponible',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurface
                                         .withOpacity(0.6),
                                   ),
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(24.0),
-                    itemCount: ordersProvider.orders.length,
-                    itemBuilder: (context, index) {
-                      final order = ordersProvider.orders[index];
-                      final statusColor = _getStatusColor(order.status.name);
-                      final statusText = _getStatusText(order.status.name);
-
-                      return Card(
-                        elevation: 0,
-                        margin: const EdgeInsets.only(bottom: 12.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .outline
-                                .withOpacity(0.2),
-                            width: 1,
-                          ),
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            _showOrderDetails(context, order);
-                          },
-                          borderRadius: BorderRadius.circular(16),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 48,
-                                  height: 48,
-                                  decoration: BoxDecoration(
-                                    color: statusColor.withOpacity(0.15),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(
-                                    Icons.shopping_bag,
-                                    color: statusColor,
-                                    size: 24,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              'Commande #${order.id}',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 3,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  statusColor.withOpacity(0.15),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              border: Border.all(
-                                                color: statusColor
-                                                    .withOpacity(0.3),
-                                              ),
-                                            ),
-                                            child: Text(
-                                              statusText,
-                                              style: TextStyle(
-                                                color: statusColor,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.person_outline,
-                                            size: 14,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface
-                                                .withOpacity(0.6),
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Expanded(
-                                            child: Text(
-                                              authProvider.user?.name ??
-                                                  "Inconnu",
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface
-                                                    .withOpacity(0.7),
-                                                fontSize: 12,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.calendar_today_outlined,
-                                            size: 14,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface
-                                                .withOpacity(0.6),
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Flexible(
-                                            child: Text(
-                                              '${order.orderDate.day}/${order.orderDate.month}/${order.orderDate.year}',
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface
-                                                    .withOpacity(0.7),
-                                                fontSize: 12,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Icon(
-                                            Icons.inventory_2_outlined,
-                                            size: 14,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface
-                                                .withOpacity(0.6),
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Flexible(
-                                            child: Text(
-                                              '${order.items.length} article(s)',
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface
-                                                    .withOpacity(0.7),
-                                                fontSize: 12,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    '\$${order.totalAmount.toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(24.0),
+                        itemCount: _orders.length,
+                        itemBuilder: (context, index) {
+                          final order = _orders[index];
+                          final userName =
+                              _userNames[order['user_id']] ?? 'Utilisateur';
+                          final statusColor =
+                              _getStatusColor(order['status'] as String);
+                          final statusText =
+                              _getStatusText(order['status'] as String);
+
+                          return Card(
+                            elevation: 0,
+                            margin: const EdgeInsets.only(bottom: 12.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outline
+                                    .withOpacity(0.2),
+                                width: 1,
+                              ),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                _showOrderDetails(context, order);
+                              },
+                              borderRadius: BorderRadius.circular(16),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 48,
+                                      height: 48,
+                                      decoration: BoxDecoration(
+                                        color: statusColor.withOpacity(0.15),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Icon(
+                                        Icons.shopping_bag,
+                                        color: statusColor,
+                                        size: 24,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  'Commande #${order['id']}',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 8,
+                                                  vertical: 3,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: statusColor
+                                                      .withOpacity(0.15),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  border: Border.all(
+                                                    color: statusColor
+                                                        .withOpacity(0.3),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  statusText,
+                                                  style: TextStyle(
+                                                    color: statusColor,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 6),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.person_outline,
+                                                size: 14,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface
+                                                    .withOpacity(0.6),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Expanded(
+                                                child: Text(
+                                                  userName,
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withOpacity(0.7),
+                                                    fontSize: 12,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.calendar_today_outlined,
+                                                size: 14,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface
+                                                    .withOpacity(0.6),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Flexible(
+                                                child: Text(
+                                                  order['created_at'] as String,
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withOpacity(0.7),
+                                                    fontSize: 12,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Icon(
+                                                Icons.inventory_2_outlined,
+                                                size: 14,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface
+                                                    .withOpacity(0.6),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Flexible(
+                                                child: Text(
+                                                  '${(order['items'] as List).length} article(s)',
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withOpacity(0.7),
+                                                    fontSize: 12,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 6),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(
+                                        '${order['total_amount']} MAD',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
           ),
         ],
       ),
     );
   }
 
-  void _showOrderDetails(BuildContext context, order) {
+  void _showOrderDetails(BuildContext context, Map<String, dynamic> order) {
+    final items = order['items'] as List;
+    final userName = _userNames[order['user_id']] ?? 'Utilisateur';
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Détails de la commande #${order.id}'),
+        title: Text('Détails de la commande #${order['id']}'),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Statut: ${_getStatusText(order.status.name)}',
+                'Client: $userName',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Statut: ${_getStatusText(order['status'] as String)}',
                 style: TextStyle(
-                  color: _getStatusColor(order.status.name),
+                  color: _getStatusColor(order['status'] as String),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -1924,17 +2074,19 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              ...order.items.map((item) {
+              ...items.map((item) {
+                final product = item['product'] as Map<String, dynamic>;
+                final quantity = item['quantity'] as int;
+                final price = product['price'];
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: Text('${item.product.name} x${item.quantity}'),
+                        child: Text('${product['name']} x$quantity'),
                       ),
-                      Text(
-                          '\$${(item.product.price * item.quantity).toStringAsFixed(2)}'),
+                      Text('$price MAD'),
                     ],
                   ),
                 );
@@ -1948,15 +2100,14 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    '\$${order.totalAmount.toStringAsFixed(2)}',
+                    '${order['total_amount']} MAD',
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              Text(
-                  'Date: ${order.orderDate.day}/${order.orderDate.month}/${order.orderDate.year}'),
+              Text('Date: ${order['created_at']}'),
             ],
           ),
         ),

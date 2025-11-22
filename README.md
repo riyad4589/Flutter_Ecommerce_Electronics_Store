@@ -1,4 +1,4 @@
-# 🛍️ Online Shop - Application E-commerce Flutter
+# 🛍️ Electronics Store - Application E-commerce Flutter
 
 <div align="center">
 
@@ -7,7 +7,7 @@
 ![SQLite](https://img.shields.io/badge/SQLite-3.0-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-Une application e-commerce moderne et complète développée avec Flutter, offrant une expérience utilisateur fluide et professionnelle.
+Une application e-commerce spécialisée en électronique développée avec Flutter, offrant une expérience utilisateur fluide et professionnelle pour l'achat de produits électroniques.
 
 [Fonctionnalités](#-fonctionnalités) • [Installation](#-installation) • [Architecture](#-architecture) • [Technologies](#-technologies) • [Screenshots](#-screenshots)
 
@@ -39,7 +39,7 @@ Une application e-commerce moderne et complète développée avec Flutter, offra
 
 ## 🎯 À propos
 
-**Online Shop** est une application mobile e-commerce complète développée avec Flutter dans le cadre d'un projet universitaire. L'application offre une expérience d'achat moderne avec une interface utilisateur élégante, des animations fluides et une architecture robuste suivant les principes de Clean Architecture.
+**Electronics Store** est une application mobile e-commerce spécialisée dans la vente de produits électroniques, développée avec Flutter dans le cadre d'un projet universitaire. L'application offre une expérience d'achat moderne pour smartphones, ordinateurs, tablettes, audio, photo/vidéo, gaming et accessoires électroniques, avec une interface utilisateur élégante, des animations fluides et une architecture robuste suivant les principes de Clean Architecture.
 
 ### Objectifs du projet
 
@@ -62,13 +62,21 @@ Une application e-commerce moderne et complète développée avec Flutter, offra
 - Persistance de la session
 - Gestion des profils utilisateurs
 
-### 🛒 Catalogue produits
-- Navigation par catégories
-- Recherche avancée de produits
-- Filtrage et tri (prix, popularité, note)
-- Détails complets des produits
-- Système de notation et avis
-- Images optimisées avec cache
+### 🛒 Catalogue produits électroniques
+
+- **7 catégories spécialisées** :
+  - 📱 Smartphones (iPhone, Samsung, Google, Xiaomi)
+  - 💻 Ordinateurs (MacBook, Dell, Lenovo, ASUS)
+  - 📲 Tablettes (iPad, Galaxy Tab, Surface)
+  - 🎧 Audio (Casques, Écouteurs, Enceintes)
+  - 📷 Photo & Vidéo (Appareils photo, Drones, Caméras)
+  - 🎮 Gaming (Consoles, Accessoires gaming)
+  - 🔌 Accessoires (Électronique divers)
+- Recherche avancée de produits électroniques
+- Filtrage multi-critères (prix, popularité, note, marque)
+- Détails complets avec spécifications techniques
+- Système de notation et avis clients
+- Images haute qualité optimisées avec cache
 
 ### 🛍️ Panier d'achat
 - Ajout/suppression de produits
@@ -484,17 +492,35 @@ Voir [AMELIORATIONS_UI_UX.md](AMELIORATIONS_UI_UX.md) pour plus de détails.
 
 ## 📱 Captures d'écran
 
-### Interface principale
+### Authentification
 
-| Accueil | Produits | Panier |
-|---------|----------|--------|
-| ![Home](screenshots/home.png) | ![Products](screenshots/products.png) | ![Cart](screenshots/cart.png) |
+| Inscription | Connexion Utilisateur | Connexion Admin |
+|------------|----------------------|-----------------|
+| ![Signup](screenshots/signup.png) | ![Login](screenshots/login-user.png) | ![Admin Login](screenshots/admin-login.png) |
+
+### Interface Utilisateur
+
+| Accueil | Produits | Détails Produit |
+|---------|----------|----------------|
+| ![Home](screenshots/home.png) | ![Products](screenshots/products.png) | ![Produits](screenshots/produits.png) |
+
+### Panier et Commandes
+
+| Panier | Commandes | Suivi Commande |
+|--------|-----------|----------------|
+| ![Cart](screenshots/cart.png) | ![Commande](screenshots/commande.png) | ![Suivi](screenshots/suivi.png) |
+
+### Profil
+
+| Profil Utilisateur |
+|-------------------|
+| ![Profile](screenshots/profile.png) |
 
 ### Administration
 
-| Dashboard | Gestion Produits | Base de données |
-|-----------|------------------|-----------------|
-| ![Admin](screenshots/admin.png) | ![Products Admin](screenshots/products_admin.png) | ![DB Viewer](screenshots/db_viewer.png) |
+| Dashboard Admin | Gestion Produits | Produits par Client | Toutes les Commandes | Gestion Utilisateurs |
+|----------------|------------------|---------------------|---------------------|---------------------|
+| ![Dashboard](screenshots/dashboard.png) | ![Products Admin](screenshots/produits.png) | ![Product Client](screenshots/product-client.png) | ![All Orders](screenshots/all-commandes.png) | ![Users](screenshots/users.png) |
 
 ---
 
@@ -556,6 +582,6 @@ Les contributions sont les bienvenues ! Voici comment contribuer :
 ### ⭐ Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile !
 
 
-[⬆ Retour en haut](#️-online-shop---application-e-commerce-flutter)
+[⬆ Retour en haut](#️-electronics-store---application-e-commerce-flutter)
 
 </div>

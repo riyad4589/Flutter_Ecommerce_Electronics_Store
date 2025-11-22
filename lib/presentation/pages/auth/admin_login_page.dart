@@ -17,6 +17,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -165,8 +166,21 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                           controller: _passwordController,
                           labelText: 'Mot de passe',
                           prefixIcon: Icons.lock_rounded,
-                          obscureText: true,
+                          obscureText: _obscurePassword,
                           validator: Validator.validatePassword,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey[600],
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
                         ),
                         const SizedBox(height: 24),
 

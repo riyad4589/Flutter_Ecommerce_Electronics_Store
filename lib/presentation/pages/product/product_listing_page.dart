@@ -114,53 +114,92 @@ class _ProductListingPageState extends State<ProductListingPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               CheckboxListTile(
-                title: const Text('📱 Électronique'),
-                value: _selectedCategories.contains('electronique'),
+                title: const Text('📱 Smartphones'),
+                value: _selectedCategories.contains('smartphones'),
                 onChanged: (value) {
                   setState(() {
                     if (value == true) {
-                      _selectedCategories.add('electronique');
+                      _selectedCategories.add('smartphones');
                     } else {
-                      _selectedCategories.remove('electronique');
+                      _selectedCategories.remove('smartphones');
                     }
                   });
                 },
               ),
               CheckboxListTile(
-                title: const Text('👕 Mode'),
-                value: _selectedCategories.contains('mode'),
+                title: const Text('💻 Ordinateurs'),
+                value: _selectedCategories.contains('ordinateurs'),
                 onChanged: (value) {
                   setState(() {
                     if (value == true) {
-                      _selectedCategories.add('mode');
+                      _selectedCategories.add('ordinateurs');
                     } else {
-                      _selectedCategories.remove('mode');
+                      _selectedCategories.remove('ordinateurs');
                     }
                   });
                 },
               ),
               CheckboxListTile(
-                title: const Text('🏠 Maison'),
-                value: _selectedCategories.contains('maison'),
+                title: const Text('📲 Tablettes'),
+                value: _selectedCategories.contains('tablettes'),
                 onChanged: (value) {
                   setState(() {
                     if (value == true) {
-                      _selectedCategories.add('maison');
+                      _selectedCategories.add('tablettes');
                     } else {
-                      _selectedCategories.remove('maison');
+                      _selectedCategories.remove('tablettes');
                     }
                   });
                 },
               ),
               CheckboxListTile(
-                title: const Text('⚽ Sports'),
-                value: _selectedCategories.contains('sports'),
+                title: const Text('🎧 Audio'),
+                value: _selectedCategories.contains('audio'),
                 onChanged: (value) {
                   setState(() {
                     if (value == true) {
-                      _selectedCategories.add('sports');
+                      _selectedCategories.add('audio');
                     } else {
-                      _selectedCategories.remove('sports');
+                      _selectedCategories.remove('audio');
+                    }
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: const Text('📷 Photo & Vidéo'),
+                value: _selectedCategories.contains('photo_video'),
+                onChanged: (value) {
+                  setState(() {
+                    if (value == true) {
+                      _selectedCategories.add('photo_video');
+                    } else {
+                      _selectedCategories.remove('photo_video');
+                    }
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: const Text('🎮 Gaming'),
+                value: _selectedCategories.contains('gaming'),
+                onChanged: (value) {
+                  setState(() {
+                    if (value == true) {
+                      _selectedCategories.add('gaming');
+                    } else {
+                      _selectedCategories.remove('gaming');
+                    }
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: const Text('🔌 Accessoires'),
+                value: _selectedCategories.contains('accessoires'),
+                onChanged: (value) {
+                  setState(() {
+                    if (value == true) {
+                      _selectedCategories.add('accessoires');
+                    } else {
+                      _selectedCategories.remove('accessoires');
                     }
                   });
                 },
@@ -280,93 +319,103 @@ class _ProductListingPageState extends State<ProductListingPage> {
                     child: ScaleAnimation(
                       child: FadeInAnimation(
                         child: InkWell(
-                onTap: () => context.go('/product/${product.id}'),
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(12)),
-                          child: Image.network(
-                            product.imageUrl,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .surfaceContainerHighest,
-                                child: Icon(Icons.image_not_supported,
-                                    size: 50,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withOpacity(0.3)),
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            },
+                          onTap: () => context.go('/product/${product.id}'),
+                          child: Card(
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(12)),
+                                    child: Image.network(
+                                      product.imageUrl,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Container(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .surfaceContainerHighest,
+                                          child: Icon(Icons.image_not_supported,
+                                              size: 50,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface
+                                                  .withOpacity(0.3)),
+                                        );
+                                      },
+                                      loadingBuilder:
+                                          (context, child, loadingProgress) {
+                                        if (loadingProgress == null)
+                                          return child;
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        product.name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${(product.discountPrice ?? product.price).toStringAsFixed(2)} DH',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                            ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: IconButton(
+                                          icon: const Icon(
+                                              Icons.add_shopping_cart_outlined),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          onPressed: () {
+                                            context
+                                                .read<CartProvider>()
+                                                .addToCart(product);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      '${product.name} ajouté au panier')),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              product.name,
-                              style: Theme.of(context).textTheme.titleSmall,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '${(product.discountPrice ?? product.price).toStringAsFixed(2)} DH',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: IconButton(
-                                icon: const Icon(
-                                    Icons.add_shopping_cart_outlined),
-                                color: Theme.of(context).colorScheme.secondary,
-                                onPressed: () {
-                                  context
-                                      .read<CartProvider>()
-                                      .addToCart(product);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            '${product.name} ajouté au panier')),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+                    ),
                   );
                 },
               ),

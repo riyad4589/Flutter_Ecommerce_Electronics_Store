@@ -123,140 +123,161 @@ class _OrdersPageState extends State<OrdersPage> {
                             final statusColor = _getStatusColor(order.status);
                             final statusText = _getStatusText(order.status);
 
-                              return AnimationConfiguration.staggeredList(
-                                position: index,
-                                duration: const Duration(milliseconds: 375),
-                                child: SlideAnimation(
-                                  verticalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: Card(
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: InkWell(
-                              onTap: () {
-                                context.go('/order-tracking/${order.id}');
-                              },
-                              borderRadius: BorderRadius.circular(12),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Commande #${order.id.substring(order.id.length > 6 ? order.id.length - 6 : 0)}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium
-                                              ?.copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 6),
-                                          decoration: BoxDecoration(
-                                            color: statusColor.withOpacity(0.2),
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          child: Text(
-                                            statusText,
-                                            style: TextStyle(
-                                              color: statusColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: Card(
+                                    margin: const EdgeInsets.only(bottom: 16),
+                                    child: InkWell(
+                                      onTap: () {
+                                        context
+                                            .go('/order-tracking/${order.id}');
+                                      },
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Commande #${order.id.substring(order.id.length > 6 ? order.id.length - 6 : 0)}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium
+                                                      ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                ),
+                                                Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 6),
+                                                  decoration: BoxDecoration(
+                                                    color: statusColor
+                                                        .withOpacity(0.2),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  child: Text(
+                                                    statusText,
+                                                    style: TextStyle(
+                                                      color: statusColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.calendar_today,
+                                                    size: 16,
+                                                    color: AppColors
+                                                        .textSecondary),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  '${order.orderDate.day}/${order.orderDate.month}/${order.orderDate.year}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                          color: AppColors
+                                                              .textSecondary),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.shopping_bag,
+                                                    size: 16,
+                                                    color: AppColors
+                                                        .textSecondary),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  '${order.items.length} article(s)',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                          color: AppColors
+                                                              .textSecondary),
+                                                ),
+                                              ],
+                                            ),
+                                            const Divider(height: 24),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Total',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium
+                                                      ?.copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  '${order.totalAmount.toStringAsFixed(2)} DH',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium
+                                                      ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            AppColors.primary,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                TextButton.icon(
+                                                  onPressed: () {
+                                                    context.go(
+                                                        '/order-tracking/${order.id}');
+                                                  },
+                                                  icon: const Icon(
+                                                      Icons.track_changes,
+                                                      size: 18),
+                                                  label: const Text(
+                                                      'Suivre ma commande'),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                    const SizedBox(height: 12),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.calendar_today,
-                                            size: 16,
-                                            color: AppColors.textSecondary),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          '${order.orderDate.day}/${order.orderDate.month}/${order.orderDate.year}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                  color: AppColors.textSecondary),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.shopping_bag,
-                                            size: 16,
-                                            color: AppColors.textSecondary),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          '${order.items.length} article(s)',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                  color: AppColors.textSecondary),
-                                        ),
-                                      ],
-                                    ),
-                                    const Divider(height: 24),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Total',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium
-                                              ?.copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          '${order.totalAmount.toStringAsFixed(2)} DH',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.primary,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 12),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            context.go(
-                                                '/order-tracking/${order.id}');
-                                          },
-                                          icon: const Icon(Icons.track_changes,
-                                              size: 18),
-                                          label: const Text('Suivre ma commande'),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
-                      );
-                  },
-                ),
-              ),
-            ),
+                      ),
+                    ),
     );
   }
 }
