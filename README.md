@@ -9,7 +9,7 @@
 
 Une application e-commerce spécialisée en électronique développée avec Flutter et Firebase, offrant une expérience utilisateur fluide et professionnelle pour l'achat de produits électroniques.
 
-[Fonctionnalités](#-fonctionnalités) • [Installation](#-installation) • [Architecture](#-architecture) • [Technologies](#-technologies) • [Screenshots](#-screenshots) • [Contributeurs](#-Contributeurs)
+[Fonctionnalités](#-fonctionnalités) • [Installation](#-installation) • [Architecture](#-architecture) • [Technologies](#-technologies-utilisées) • [Screenshots](#-captures-décran) • [Contributeurs](#-contributeurs)
 
 </div>
 
@@ -26,7 +26,7 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 - [Utilisation](#-utilisation)
 - [Structure du projet](#-structure-du-projet)
 - [Captures d'écran](#-captures-décran)
-- [Contributeurs](#-Contributeurs)
+- [Contributeurs](#-contributeurs)
 
 ---
 
