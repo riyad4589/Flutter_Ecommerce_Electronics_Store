@@ -4,10 +4,10 @@
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 ![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2?style=for-the-badge&logo=dart&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-3.0-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-Une application e-commerce spécialisée en électronique développée avec Flutter, offrant une expérience utilisateur fluide et professionnelle pour l'achat de produits électroniques.
+Une application e-commerce spécialisée en électronique développée avec Flutter et Firebase, offrant une expérience utilisateur fluide et professionnelle pour l'achat de produits électroniques.
 
 [Fonctionnalités](#-fonctionnalités) • [Installation](#-installation) • [Architecture](#-architecture) • [Technologies](#-technologies) • [Screenshots](#-screenshots) • [Contributeurs](#-Contributeurs)
 
@@ -22,10 +22,9 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 - [Technologies utilisées](#-technologies-utilisées)
 - [Architecture](#-architecture)
 - [Installation](#-installation)
-- [Configuration](#-configuration)
+- [Configuration Firebase](#-configuration-firebase)
 - [Utilisation](#-utilisation)
 - [Structure du projet](#-structure-du-projet)
-- [API Mock](#-api-mock)
 - [Captures d'écran](#-captures-décran)
 - [Contributeurs](#-Contributeurs)
 
@@ -33,31 +32,33 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 
 ## 🎯 À propos
 
-**Electronics Store** est une application mobile e-commerce spécialisée dans la vente de produits électroniques, développée avec Flutter dans le cadre d'un projet universitaire. L'application offre une expérience d'achat moderne pour smartphones, ordinateurs, tablettes, audio, photo/vidéo, gaming et accessoires électroniques, avec une interface utilisateur élégante, des animations fluides et une architecture robuste suivant les principes de Clean Architecture.
+**Electronics Store** est une application mobile e-commerce spécialisée dans la vente de produits électroniques, développée avec Flutter et **Firebase** dans le cadre d'un projet universitaire. L'application offre une expérience d'achat moderne pour smartphones, ordinateurs, tablettes, audio, photo/vidéo, gaming et accessoires électroniques, avec une interface utilisateur élégante, des animations fluides et une architecture robuste suivant les principes de Clean Architecture.
 
 ### Objectifs du projet
 
 - ✅ Créer une application e-commerce fonctionnelle et complète
 - ✅ Implémenter une architecture propre et maintenable (Clean Architecture)
 - ✅ Offrir une expérience utilisateur moderne et fluide
-- ✅ Gérer l'authentification et les sessions utilisateurs
-- ✅ Intégrer une base de données locale (SQLite)
+- ✅ Gérer l'authentification avec **Firebase Authentication**
+- ✅ Intégrer une base de données cloud (**Cloud Firestore**)
+- ✅ Stockage d'images avec **Firebase Storage**
 - ✅ Développer un panel d'administration complet
 
 ---
 
 ## ✨ Fonctionnalités
 
-### 🔐 Authentification
+### 🔐 Authentification (Firebase Auth)
 - Inscription avec validation des champs
 - Connexion avec gestion de session
 - Déconnexion sécurisée
-- Persistance de la session
+- Persistance de la session automatique
 - Gestion des profils utilisateurs
+- Upload d'images de profil (Firebase Storage)
 
 ### 🛒 Catalogue produits électroniques
 
-- **7 catégories spécialisées** :
+- **8 catégories spécialisées** :
   - 📱 Smartphones (iPhone, Samsung, Google, Xiaomi)
   - 💻 Ordinateurs (MacBook, Dell, Lenovo, ASUS)
   - 📲 Tablettes (iPad, Galaxy Tab, Surface)
@@ -65,6 +66,7 @@ Une application e-commerce spécialisée en électronique développée avec Flut
   - 📷 Photo & Vidéo (Appareils photo, Drones, Caméras)
   - 🎮 Gaming (Consoles, Accessoires gaming)
   - 🔌 Accessoires (Électronique divers)
+  - ⌚ Montres connectées (Apple Watch, Samsung Galaxy Watch)
 - Recherche avancée de produits électroniques
 - Filtrage multi-critères (prix, popularité, note, marque)
 - Détails complets avec spécifications techniques
@@ -75,12 +77,12 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 - Ajout/suppression de produits
 - Modification des quantités
 - Calcul automatique du total
-- Persistance du panier
+- Persistance du panier dans le cloud
 - Animation fluide des actions
 
 ### ❤️ Favoris
 - Gestion des produits favoris
-- Synchronisation avec le compte
+- Synchronisation cloud avec le compte
 - Accès rapide aux produits préférés
 
 ### 📦 Commandes
@@ -100,6 +102,7 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 - Gestion des produits (CRUD)
 - Gestion des catégories (CRUD)
 - Gestion des commandes
+- Accès basé sur le rôle utilisateur
 
 ---
 
@@ -109,13 +112,15 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 - **Flutter** 3.0+ - Framework UI multiplateforme
 - **Dart** 3.0+ - Langage de programmation
 
+### Firebase (Backend as a Service)
+- **Firebase Core** ^3.13.0 - Initialisation Firebase
+- **Firebase Auth** ^5.7.0 - Authentification utilisateurs
+- **Cloud Firestore** ^5.6.7 - Base de données NoSQL cloud
+- **Firebase Storage** ^12.4.10 - Stockage de fichiers/images
+
 ### État & Navigation
 - **Provider** ^6.1.2 - Gestion d'état
 - **GoRouter** ^14.0.0 - Navigation déclarative et routing
-
-### Base de données
-- **SQLite** (sqflite ^2.3.0) - Base de données locale
-- **Path Provider** ^2.1.3 - Gestion des chemins de fichiers
 
 ### Réseau & API
 - **Dio** ^5.4.3 - Client HTTP
@@ -142,16 +147,15 @@ Le projet suit les principes de **Clean Architecture** avec une séparation clai
 lib/
 ├── core/                      # Code partagé
 │   ├── constants/            # Constantes globales
-│   ├── database/             # Configuration SQLite
 │   ├── error/                # Gestion des erreurs
 │   ├── network/              # Configuration réseau
 │   ├── usecases/             # Use cases abstraits
-│   └── utils/                # Utilitaires
+│   └── utils/                # Utilitaires (router, etc.)
 │
 ├── data/                      # Couche de données
 │   ├── datasources/          # Sources de données
-│   │   ├── local/           # Base de données locale
-│   │   └── remote/          # API externe
+│   │   ├── *_firebase_datasource.dart  # Firebase Firestore
+│   │   └── *_remote_datasource.dart    # API externe
 │   ├── models/               # Modèles de données
 │   └── repositories/         # Implémentations repositories
 │
@@ -185,13 +189,14 @@ lib/
 - Dart SDK 3.0 ou supérieur
 - Android Studio / VS Code
 - Git
+- Compte Firebase (pour la configuration)
 
 ### Étapes d'installation
 
 1. **Cloner le repository**
 ```bash
-git clone https://github.com/votre-username/online-shop.git
-cd online-shop
+git clone https://github.com/riyad4589/Flutter_Ecommerce_Electronics_Store.git
+cd Flutter_Ecommerce_Electronics_Store
 ```
 
 2. **Installer les dépendances**
@@ -199,10 +204,7 @@ cd online-shop
 flutter pub get
 ```
 
-3. **Générer l'icône de l'application** (optionnel)
-```bash
-flutter pub run flutter_launcher_icons
-```
+3. **Configurer Firebase** (voir section suivante)
 
 4. **Lancer l'application**
 ```bash
@@ -215,58 +217,83 @@ flutter run --release
 
 ---
 
-## ⚙️ Configuration
+## 🔥 Configuration Firebase
 
-### Base de données
+### 1. Créer un projet Firebase
 
-La base de données SQLite est automatiquement initialisée au premier lancement avec :
-- **Nom du fichier** : `ecommerce.db`
-- **Tables** : users, products, categories, cart_items, orders, order_items, favorites, addresses
+1. Rendez-vous sur [Firebase Console](https://console.firebase.google.com/)
+2. Créez un nouveau projet ou utilisez un projet existant
+3. Activez les services suivants :
+   - **Authentication** (Email/Password)
+   - **Cloud Firestore**
 
-### Configuration Mock API (pour développement)
-
-Le projet inclut une API mock Node.js dans le dossier `api_mock/` :
+### 2. Configurer FlutterFire
 
 ```bash
-cd api_mock
-npm install
-npm start
+# Installer FlutterFire CLI
+dart pub global activate flutterfire_cli
+
+# Configurer Firebase pour votre projet
+flutterfire configure
 ```
 
-L'API mock sera disponible sur `http://localhost:3000`
+### 3. Structure Firestore
+
+Le projet utilise les collections suivantes :
+
+```
+firestore/
+├── users/              # Utilisateurs
+│   ├── {userId}/
+│   │   ├── cart/       # Panier de l'utilisateur
+│   │   ├── favorites/  # Favoris de l'utilisateur
+│   │   └── orders/     # Commandes de l'utilisateur
+│
+├── products/           # Catalogue de produits
+├── categories/         # Catégories de produits
+└── orders/             # Commandes globales (admin)
+```
+
+### 4. Règles de sécurité Firestore
+
+Les règles de sécurité sont définies dans `firestore.rules` :
+- Les utilisateurs peuvent accéder uniquement à leurs propres données
+- Les admins (role: 'admin') peuvent accéder à toutes les données
+- Les produits et catégories sont en lecture publique
 
 ---
 
 ## 🚀 Utilisation
 
-### Connexion test
+### Comptes de test
 
 **Utilisateur standard :**
 - Créez un nouveau compte via la page d'inscription
 
 **Administrateur :**
-- Email : `admin`
+- Nom d'utilisateur : `admin`
 - Mot de passe : `admin123`
 
 ### Pages principales
 
 L'application comprend les sections suivantes :
 
-- **Accueil** - Page de lancement
-- **Authentification** - Inscription et connexion
-- **Produits** - Catalogue et détails des produits électroniques
+- **Accueil** - Produits populaires et promotions
+- **Catégories** - Navigation par catégorie de produits
+- **Détails produit** - Informations complètes sur un produit
 - **Panier** - Gestion du panier d'achat
+- **Checkout** - Finalisation de commande
 - **Commandes** - Historique et suivi des commandes
 - **Favoris** - Produits favoris
 - **Profil** - Informations utilisateur et paramètres
-- **Dashboard Admin** - Panel d'administration (accessible via le profil admin)
+- **Dashboard Admin** - Panel d'administration complet
 
 ---
 
 ## 📁 Structure du projet
 
 ```
-online-shop/
+Flutter_Ecommerce_Electronics_Store/
 │
 ├── android/                   # Configuration Android
 ├── ios/                       # Configuration iOS
@@ -280,59 +307,66 @@ online-shop/
 │
 ├── lib/                       # Code source Dart
 │   ├── core/                 # Fonctionnalités partagées
-│   ├── data/                 # Couche de données
+│   ├── data/                 # Couche de données (Firebase)
 │   ├── domain/               # Couche métier
 │   ├── presentation/         # Couche UI
 │   ├── injection_container.dart  # DI setup
 │   └── main.dart            # Point d'entrée
 │
+├── scripts/                   # Scripts utilitaires
+│   └── seed_firebase.js      # Script de seed Firestore
+│
 ├── test/                      # Tests
-├── api_mock/                  # Serveur API mock (Node.js)
 ├── screenshots/               # Captures d'écran
 │
+├── firebase.json             # Configuration Firebase
+├── firestore.rules           # Règles de sécurité Firestore
+├── firestore.indexes.json    # Index Firestore
 ├── pubspec.yaml              # Dépendances Flutter
 ├── analysis_options.yaml     # Règles d'analyse Dart
-├── README.md                 # Ce fichier
-└── RAPPORT.md                # Rapport de projet
+└── README.md                 # Ce fichier
 ```
 
-## 🌐 API Mock
+---
 
-Un serveur Node.js est fourni pour le développement local dans le dossier `api_mock/`.
+## 🔒 Sécurité Firebase
 
-### Démarrage
+### Règles Firestore
 
-```bash
-cd api_mock
-npm install
-npm start
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Fonction admin
+    function isAdmin() {
+      return request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Users: lecture/écriture propre, admin peut tout voir
+    match /users/{userId} {
+      allow get: if request.auth.uid == userId || isAdmin();
+      allow list: if isAdmin();
+      allow create: if request.auth != null;
+      allow update: if request.auth.uid == userId || isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Products & Categories: lecture publique, écriture admin
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Orders: propriétaire ou admin
+    match /orders/{orderId} {
+      allow get: if isAdmin() || resource.data.userId == request.auth.uid;
+      allow list: if isAdmin();
+      allow create: if request.auth != null;
+    }
+  }
+}
 ```
-
-Le serveur démarre sur `http://localhost:3000`
-
-### Endpoints disponibles
-
-**Authentification**
-- `POST /api/v1/auth/register` - Inscription
-- `POST /api/v1/auth/login` - Connexion
-
-**Produits**
-- `GET /api/v1/products` - Liste des produits
-- `GET /api/v1/products/:id` - Détails d'un produit
-- `GET /api/v1/categories` - Liste des catégories
-
-**Panier** (authentification requise)
-- `GET /api/v1/cart` - Récupérer le panier
-- `POST /api/v1/cart/add` - Ajouter un produit
-
-**Commandes** (authentification requise)
-- `GET /api/v1/orders` - Historique des commandes
-- `POST /api/v1/orders` - Créer une commande
-
-### Utilisation depuis émulateur
-
-- **Android** : Utiliser `http://10.0.2.2:3000`
-- **iOS** : Utiliser `http://localhost:3000`
 
 ---
 
@@ -389,7 +423,7 @@ Le serveur démarre sur `http://localhost:3000`
 
 ---
 
-## 🛠️ Panel d’Administration
+## 🛠️ Panel d'Administration
 
 <div align="center">
 
@@ -399,6 +433,22 @@ Le serveur démarre sur `http://localhost:3000`
 
 </div>
 
+---
+
+## 🔧 Scripts utilitaires
+
+### Seed Firebase (remplir la base de données)
+
+```bash
+cd scripts
+npm install firebase-admin
+node seed_firebase.js
+```
+
+Ce script crée :
+- 8 catégories de produits
+- 26 produits électroniques
+- 1 compte administrateur
 
 ---
 

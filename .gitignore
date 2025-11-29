@@ -43,3 +43,44 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Firebase sensitive files (NE PAS PUSHER!)
+scripts/serviceAccountKey.json
+**/serviceAccountKey.json
+google-services.json
+**/google-services.json
+GoogleService-Info.plist
+**/GoogleService-Info.plist
+
+# Firebase config (généré par flutterfire)
+lib/firebase_options.dart
+
+# Node modules
+**/node_modules/
+scripts/node_modules/
+api_mock/node_modules/
+
+# Environment files
+.env
+.env.*
+*.env
+
+# Local configuration
+local.properties
+**/local.properties
+
+# Build outputs
+*.apk
+*.aab
+*.ipa
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+
+RAPPORT.md
+readme test

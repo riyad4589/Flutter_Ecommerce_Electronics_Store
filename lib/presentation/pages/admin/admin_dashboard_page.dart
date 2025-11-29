@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/orders_provider.dart';
-import '../../../core/database/database_helper.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({super.key});
@@ -238,8 +238,23 @@ class _UsersManagementTabState extends State<UsersManagementTab> {
 
   Future<void> _loadUsers() async {
     try {
-      final db = await DatabaseHelper.instance.database;
-      final users = await db.query('users', orderBy: 'created_at DESC');
+      final firestore = FirebaseFirestore.instance;
+      final usersSnapshot = await firestore
+          .collection('users')
+          .orderBy('createdAt', descending: true)
+          .get();
+
+      final users = usersSnapshot.docs.map((doc) {
+        final data = doc.data();
+        return {
+          'id': doc.id,
+          'name': data['name'] ?? '',
+          'email': data['email'] ?? '',
+          'username': data['username'] ?? data['email']?.split('@')[0] ?? '',
+          'role': data['role'] ?? 'user',
+          'created_at': data['createdAt']?.toDate().toIso8601String() ?? '',
+        };
+      }).toList();
 
       if (mounted) {
         setState(() {
@@ -610,19 +625,13 @@ class _UsersManagementTabState extends State<UsersManagementTab> {
 
     if (result == true && context.mounted) {
       try {
-        final db = await DatabaseHelper.instance.database;
-        await db.update(
-          'users',
-          {
-            'name': nameController.text,
-            'email': emailController.text,
-            'username': usernameController.text,
-            'password': passwordController.text,
-            'updated_at': DateTime.now().toIso8601String(),
-          },
-          where: 'id = ?',
-          whereArgs: [userId],
-        );
+        final firestore = FirebaseFirestore.instance;
+        await firestore.collection('users').doc(userId).update({
+          'name': nameController.text,
+          'email': emailController.text,
+          'username': usernameController.text,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -669,12 +678,8 @@ class _UsersManagementTabState extends State<UsersManagementTab> {
 
     if (confirmed == true && context.mounted) {
       try {
-        final db = await DatabaseHelper.instance.database;
-        await db.delete(
-          'users',
-          where: 'id = ?',
-          whereArgs: [userId],
-        );
+        final firestore = FirebaseFirestore.instance;
+        await firestore.collection('users').doc(userId).delete();
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -739,8 +744,23 @@ class _ProductsManagementTabState extends State<ProductsManagementTab> {
 
   Future<void> _loadProducts() async {
     try {
-      final db = await DatabaseHelper.instance.database;
-      final products = await db.query('products', orderBy: 'name ASC');
+      final firestore = FirebaseFirestore.instance;
+      final productsSnapshot =
+          await firestore.collection('products').orderBy('name').get();
+
+      final products = productsSnapshot.docs.map((doc) {
+        final data = doc.data();
+        return {
+          'id': doc.id,
+          'name': data['name'] ?? '',
+          'price': (data['price'] ?? 0).toDouble(),
+          'description': data['description'] ?? '',
+          'image_url': data['imageUrl'] ?? '',
+          'category': data['category'] ?? '',
+          'stock': data['stock'] ?? 0,
+          'rating': (data['rating'] ?? 0).toDouble(),
+        };
+      }).toList();
 
       if (mounted) {
         setState(() {
@@ -1026,7 +1046,7 @@ class _ProductsManagementTabState extends State<ProductsManagementTab> {
                             ],
                           ),
                           child: Text(
-                            '\$${product['price']}',
+                            '${product['price']} DH',
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -1175,17 +1195,13 @@ class _ProductsManagementTabState extends State<ProductsManagementTab> {
 
     if (result == true && context.mounted) {
       try {
-        final db = await DatabaseHelper.instance.database;
-        await db.update(
-          'products',
-          {
-            'name': nameController.text,
-            'price': double.tryParse(priceController.text) ?? product['price'],
-            'description': descController.text,
-          },
-          where: 'id = ?',
-          whereArgs: [product['id']],
-        );
+        final firestore = FirebaseFirestore.instance;
+        await firestore.collection('products').doc(product['id']).update({
+          'name': nameController.text,
+          'price': double.tryParse(priceController.text) ?? product['price'],
+          'description': descController.text,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -1231,12 +1247,8 @@ class _ProductsManagementTabState extends State<ProductsManagementTab> {
 
     if (confirmed == true && context.mounted) {
       try {
-        final db = await DatabaseHelper.instance.database;
-        await db.delete(
-          'products',
-          where: 'id = ?',
-          whereArgs: [productId],
-        );
+        final firestore = FirebaseFirestore.instance;
+        await firestore.collection('products').doc(productId).delete();
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -1277,44 +1289,56 @@ class _ProductsByClientTabState extends State<ProductsByClientTab> {
   Future<void> _loadAllOrders() async {
     setState(() => _isLoading = true);
     try {
-      final db = await DatabaseHelper.instance.database;
+      final firestore = FirebaseFirestore.instance;
 
       // Charger toutes les commandes
-      final ordersData = await db.query('orders', orderBy: 'created_at DESC');
+      final ordersSnapshot = await firestore
+          .collection('orders')
+          .orderBy('createdAt', descending: true)
+          .get();
 
       // Charger les informations utilisateurs
-      final users = await db.query('users');
+      final usersSnapshot = await firestore.collection('users').get();
       final userMap = {
-        for (var user in users) user['id'] as String: user['name'] as String
+        for (var doc in usersSnapshot.docs)
+          doc.id: doc.data()['name'] as String? ?? 'Utilisateur'
       };
 
       // Pour chaque commande, charger les items
       List<Map<String, dynamic>> ordersWithItems = [];
-      for (var order in ordersData) {
-        final items = await db.query(
-          'order_items',
-          where: 'order_id = ?',
-          whereArgs: [order['id']],
-        );
+      for (var orderDoc in ordersSnapshot.docs) {
+        final orderData = orderDoc.data();
+        final items = orderData['items'] as List<dynamic>? ?? [];
 
         // Charger les détails des produits pour chaque item
         List<Map<String, dynamic>> itemsWithProducts = [];
         for (var item in items) {
-          final product = await db.query(
-            'products',
-            where: 'id = ?',
-            whereArgs: [item['product_id']],
-          );
-          if (product.isNotEmpty) {
-            itemsWithProducts.add({
-              'quantity': item['quantity'],
-              'product': product.first,
-            });
+          final productId = item['productId'] as String?;
+          if (productId != null) {
+            final productDoc =
+                await firestore.collection('products').doc(productId).get();
+            if (productDoc.exists) {
+              final productData = productDoc.data()!;
+              itemsWithProducts.add({
+                'quantity': item['quantity'] ?? 1,
+                'product': {
+                  'id': productDoc.id,
+                  'name': productData['name'] ?? '',
+                  'price': (productData['price'] ?? 0).toDouble(),
+                  'image_url': productData['imageUrl'] ?? '',
+                },
+              });
+            }
           }
         }
 
         ordersWithItems.add({
-          ...order,
+          'id': orderDoc.id,
+          'user_id': orderData['userId'] ?? '',
+          'total': (orderData['total'] ?? 0).toDouble(),
+          'status': orderData['status'] ?? 'pending',
+          'created_at':
+              orderData['createdAt']?.toDate().toIso8601String() ?? '',
           'items': itemsWithProducts,
         });
       }
@@ -1653,44 +1677,56 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
   Future<void> _loadAllOrders() async {
     setState(() => _isLoading = true);
     try {
-      final db = await DatabaseHelper.instance.database;
+      final firestore = FirebaseFirestore.instance;
 
       // Charger toutes les commandes
-      final ordersData = await db.query('orders', orderBy: 'created_at DESC');
+      final ordersSnapshot = await firestore
+          .collection('orders')
+          .orderBy('createdAt', descending: true)
+          .get();
 
       // Charger les informations utilisateurs
-      final users = await db.query('users');
+      final usersSnapshot = await firestore.collection('users').get();
       final userMap = {
-        for (var user in users) user['id'] as String: user['name'] as String
+        for (var doc in usersSnapshot.docs)
+          doc.id: doc.data()['name'] as String? ?? 'Utilisateur'
       };
 
       // Pour chaque commande, charger les items
       List<Map<String, dynamic>> ordersWithItems = [];
-      for (var order in ordersData) {
-        final items = await db.query(
-          'order_items',
-          where: 'order_id = ?',
-          whereArgs: [order['id']],
-        );
+      for (var orderDoc in ordersSnapshot.docs) {
+        final orderData = orderDoc.data();
+        final items = orderData['items'] as List<dynamic>? ?? [];
 
         // Charger les détails des produits pour chaque item
         List<Map<String, dynamic>> itemsWithProducts = [];
         for (var item in items) {
-          final product = await db.query(
-            'products',
-            where: 'id = ?',
-            whereArgs: [item['product_id']],
-          );
-          if (product.isNotEmpty) {
-            itemsWithProducts.add({
-              'quantity': item['quantity'],
-              'product': product.first,
-            });
+          final productId = item['productId'] as String?;
+          if (productId != null) {
+            final productDoc =
+                await firestore.collection('products').doc(productId).get();
+            if (productDoc.exists) {
+              final productData = productDoc.data()!;
+              itemsWithProducts.add({
+                'quantity': item['quantity'] ?? 1,
+                'product': {
+                  'id': productDoc.id,
+                  'name': productData['name'] ?? '',
+                  'price': (productData['price'] ?? 0).toDouble(),
+                  'image_url': productData['imageUrl'] ?? '',
+                },
+              });
+            }
           }
         }
 
         ordersWithItems.add({
-          ...order,
+          'id': orderDoc.id,
+          'user_id': orderData['userId'] ?? '',
+          'total': (orderData['total'] ?? 0).toDouble(),
+          'status': orderData['status'] ?? 'pending',
+          'created_at':
+              orderData['createdAt']?.toDate().toIso8601String() ?? '',
           'items': itemsWithProducts,
         });
       }

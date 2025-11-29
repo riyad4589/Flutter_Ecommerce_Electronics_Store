@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'core/constants/app_constants.dart';
 import 'core/utils/app_router.dart';
 import 'presentation/themes/app_theme.dart';
 import 'injection_container.dart' as di;
 import 'presentation/providers/auth_provider.dart';
 import 'presentation/providers/cart_provider.dart';
+import 'presentation/providers/category_provider.dart';
 import 'presentation/providers/favorites_provider.dart';
 import 'presentation/providers/orders_provider.dart';
 import 'presentation/providers/product_provider.dart';
@@ -13,6 +16,12 @@ import 'presentation/providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialiser Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await di.init();
 
   runApp(
@@ -20,6 +29,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => di.sl<AuthProvider>()),
         ChangeNotifierProvider(create: (_) => di.sl<ProductProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<CategoryProvider>()),
         ChangeNotifierProxyProvider<AuthProvider, CartProvider>(
           create: (_) => di.sl<CartProvider>(),
           update: (_, auth, cart) {
@@ -83,7 +93,7 @@ void main() async {
           create: (context) {
             final auth = context.read<AuthProvider>();
             return ThemeProvider(
-              themeLocalDataSource: di.sl(),
+              themeFirebaseDataSource: di.sl(),
             )..setUserId(auth.user?.id ?? '');
           },
           update: (_, auth, previous) {
@@ -92,7 +102,7 @@ void main() async {
             }
             return previous ??
                 ThemeProvider(
-                  themeLocalDataSource: di.sl(),
+                  themeFirebaseDataSource: di.sl(),
                 );
           },
         ),

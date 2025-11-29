@@ -2,22 +2,19 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import 'core/database/database_helper.dart';
 import 'core/network/network_info.dart';
+import 'core/services/firebase_service.dart';
 import 'core/utils/custom_dio_interceptor.dart';
-import 'data/datasources/auth_local_datasource.dart';
-import 'data/datasources/auth_remote_datasource.dart';
-import 'data/datasources/cart_local_datasource.dart';
-import 'data/datasources/favorites_local_datasource.dart';
-import 'data/datasources/orders_local_datasource.dart';
-import 'data/datasources/orders_remote_datasource.dart';
+import 'data/datasources/auth_firebase_datasource.dart';
+import 'data/datasources/cart_firebase_datasource.dart';
+import 'data/datasources/favorites_firebase_datasource.dart';
+import 'data/datasources/orders_firebase_datasource.dart';
+import 'data/datasources/product_firebase_datasource.dart';
 import 'data/datasources/product_remote_datasource.dart';
-import 'data/datasources/product_local_datasource.dart';
-import 'data/datasources/user_local_datasource.dart';
-import 'data/datasources/theme_local_datasource.dart';
-import 'data/repositories/auth_repository_impl.dart';
-import 'data/repositories/favorites_repository_impl.dart';
-import 'data/repositories/orders_repository_impl.dart';
+import 'data/datasources/theme_firebase_datasource.dart';
+import 'data/repositories/auth_repository_firebase_impl.dart';
+import 'data/repositories/favorites_repository_firebase_impl.dart';
+import 'data/repositories/orders_repository_firebase_impl.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/repositories/favorites_repository.dart';
 import 'domain/repositories/orders_repository.dart';
@@ -30,10 +27,14 @@ import 'domain/usecases/orders/delete_order.dart';
 import 'presentation/providers/auth_provider.dart';
 import 'presentation/providers/cart_provider.dart';
 import 'presentation/providers/product_provider.dart';
+import 'presentation/providers/category_provider.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  // Firebase Service
+  sl.registerLazySingleton<FirebaseService>(() => FirebaseService.instance);
+
   // Use cases
   sl.registerLazySingleton(() => LoginUser(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
@@ -44,68 +45,57 @@ Future<void> init() async {
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(
-      remoteDataSource: sl(),
-      localDataSource: sl(),
-      userLocalDataSource: sl(),
+    () => AuthRepositoryFirebaseImpl(
+      firebaseDataSource: sl(),
       networkInfo: sl(),
     ),
   );
   sl.registerLazySingleton<FavoritesRepository>(
-    () => FavoritesRepositoryImpl(
-      localDataSource: sl(),
+    () => FavoritesRepositoryFirebaseImpl(
+      firebaseDataSource: sl(),
     ),
   );
   sl.registerLazySingleton<OrdersRepository>(
-    () => OrdersRepositoryImpl(
-      remoteDataSource: sl(),
-      localDataSource: sl(),
+    () => OrdersRepositoryFirebaseImpl(
+      firebaseDataSource: sl(),
       networkInfo: sl(),
     ),
   );
 
-  // Data sources
-  sl.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(dio: sl()),
+  // Firebase Data sources
+  sl.registerLazySingleton<AuthFirebaseDataSource>(
+    () => AuthFirebaseDataSourceImpl(),
   );
-  sl.registerLazySingleton<AuthLocalDataSource>(
-    () => AuthLocalDataSourceImpl(databaseHelper: sl()),
+  sl.registerLazySingleton<CartFirebaseDataSource>(
+    () => CartFirebaseDataSourceImpl(),
   );
+  sl.registerLazySingleton<FavoritesFirebaseDataSource>(
+    () => FavoritesFirebaseDataSourceImpl(),
+  );
+  sl.registerLazySingleton<OrdersFirebaseDataSource>(
+    () => OrdersFirebaseDataSourceImpl(),
+  );
+  sl.registerLazySingleton<ProductFirebaseDataSource>(
+    () => ProductFirebaseDataSourceImpl(),
+  );
+  sl.registerLazySingleton<ThemeFirebaseDataSource>(
+    () => ThemeFirebaseDataSourceImpl(),
+  );
+
+  // Remote Data sources (pour API Mock si encore nécessaire)
   sl.registerLazySingleton<ProductRemoteDataSource>(
     () => ProductRemoteDataSourceImpl(dio: sl()),
-  );
-  sl.registerLazySingleton<ProductLocalDataSource>(
-    () => ProductLocalDataSource(databaseHelper: sl()),
-  );
-  sl.registerLazySingleton<UserLocalDataSource>(
-    () => UserLocalDataSource(databaseHelper: sl()),
-  );
-  sl.registerLazySingleton<CartLocalDataSource>(
-    () => CartLocalDataSourceImpl(databaseHelper: sl()),
-  );
-  sl.registerLazySingleton<FavoritesLocalDataSource>(
-    () => FavoritesLocalDataSourceImpl(databaseHelper: sl()),
-  );
-  sl.registerLazySingleton<OrdersRemoteDataSource>(
-    () => OrdersRemoteDataSourceImpl(dio: sl()),
-  );
-  sl.registerLazySingleton<OrdersLocalDataSource>(
-    () => OrdersLocalDataSourceImpl(databaseHelper: sl()),
-  );
-  sl.registerLazySingleton<ThemeLocalDataSource>(
-    () => ThemeLocalDataSourceImpl(databaseHelper: sl()),
   );
 
   // Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
-  sl.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper.instance);
 
-  // External - Dio
+  // External - Dio (gardé pour compatibilité avec API externe)
   sl.registerLazySingleton(() {
     final dio = Dio();
     dio.options.connectTimeout = const Duration(seconds: 5);
     dio.options.receiveTimeout = const Duration(seconds: 3);
-    dio.interceptors.add(CustomDioInterceptor(sl()));
+    dio.interceptors.add(CustomDioInterceptor());
     dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,
       requestBody: true,
@@ -126,10 +116,13 @@ Future<void> init() async {
       ));
   sl.registerFactory(() => ProductProvider(
         productRemoteDataSource: sl(),
-        productLocalDataSource: sl(),
+        productFirebaseDataSource: sl(),
       ));
   sl.registerFactory(() => CartProvider(
-        cartLocalDataSource: sl(),
+        cartFirebaseDataSource: sl(),
+      ));
+  sl.registerFactory(() => CategoryProvider(
+        productFirebaseDataSource: sl(),
       ));
 
   // Note: FavoritesProvider et OrdersProvider sont enregistrés dans main.dart

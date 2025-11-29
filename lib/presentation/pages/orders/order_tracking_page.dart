@@ -167,7 +167,7 @@ class OrderTrackingPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                _buildTrackingTimeline(context),
+                _buildTrackingTimeline(context, order),
 
                 const SizedBox(height: 24),
 
@@ -353,26 +353,77 @@ class OrderTrackingPage extends StatelessWidget {
     return months[month - 1];
   }
 
-  Widget _buildTrackingTimeline(BuildContext context) {
-    final steps = [
-      {
-        'title': 'Commande confirmée',
-        'subtitle': '15 nov, 10:30',
-        'completed': true
-      },
-      {
-        'title': 'En préparation',
-        'subtitle': '15 nov, 14:20',
-        'completed': true
-      },
-      {'title': 'Expédiée', 'subtitle': '16 nov, 08:15', 'completed': true},
-      {
-        'title': 'En cours de livraison',
-        'subtitle': '17 nov, 09:00',
-        'completed': true
-      },
-      {'title': 'Livrée', 'subtitle': 'En attente', 'completed': false},
-    ];
+  Widget _buildTrackingTimeline(BuildContext context, entities.Order order) {
+    // Générer les étapes dynamiquement selon le statut de la commande
+    final orderDate = order.orderDate;
+
+    List<Map<String, dynamic>> steps = [];
+
+    // Étape 1: Commande confirmée (toujours complétée)
+    steps.add({
+      'title': 'Commande confirmée',
+      'subtitle': _formatDateTime(orderDate),
+      'completed': true,
+    });
+
+    // Étape 2: En préparation
+    final isPreparing = order.status != entities.OrderStatus.pending;
+    steps.add({
+      'title': 'En préparation',
+      'subtitle': isPreparing
+          ? _formatDateTime(orderDate.add(const Duration(hours: 4)))
+          : 'En attente',
+      'completed': isPreparing,
+    });
+
+    // Étape 3: Expédiée
+    final isShipped = order.status == entities.OrderStatus.shipped ||
+        order.status == entities.OrderStatus.delivered;
+    steps.add({
+      'title': 'Expédiée',
+      'subtitle': isShipped
+          ? _formatDateTime(orderDate.add(const Duration(days: 1)))
+          : 'En attente',
+      'completed': isShipped,
+    });
+
+    // Étape 4: En cours de livraison
+    final isDelivering = order.status == entities.OrderStatus.shipped ||
+        order.status == entities.OrderStatus.delivered;
+    steps.add({
+      'title': 'En cours de livraison',
+      'subtitle': isDelivering
+          ? _formatDateTime(orderDate.add(const Duration(days: 2)))
+          : 'En attente',
+      'completed': isDelivering,
+    });
+
+    // Étape 5: Livrée
+    final isDelivered = order.status == entities.OrderStatus.delivered;
+    steps.add({
+      'title': 'Livrée',
+      'subtitle': isDelivered
+          ? _formatDateTime(orderDate.add(const Duration(days: 3)))
+          : 'En attente',
+      'completed': isDelivered,
+    });
+
+    // Si annulée, modifier l'affichage
+    if (order.status == entities.OrderStatus.cancelled) {
+      steps = [
+        {
+          'title': 'Commande confirmée',
+          'subtitle': _formatDateTime(orderDate),
+          'completed': true,
+        },
+        {
+          'title': 'Commande annulée',
+          'subtitle': 'La commande a été annulée',
+          'completed': false,
+          'isCancelled': true,
+        },
+      ];
+    }
 
     return Card(
       child: Padding(
@@ -382,6 +433,7 @@ class OrderTrackingPage extends StatelessWidget {
             final index = entry.key;
             final step = entry.value;
             final isLast = index == steps.length - 1;
+            final isCancelled = step['isCancelled'] == true;
 
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,17 +445,21 @@ class OrderTrackingPage extends StatelessWidget {
                       height: 32,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: step['completed'] as bool
-                            ? AppColors.success
-                            : Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerHighest,
+                        color: isCancelled
+                            ? Colors.red
+                            : (step['completed'] as bool
+                                ? AppColors.success
+                                : Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainerHighest),
                       ),
                       child: Icon(
-                        step['completed'] as bool
-                            ? Icons.check
-                            : Icons.circle_outlined,
-                        color: step['completed'] as bool
+                        isCancelled
+                            ? Icons.cancel
+                            : (step['completed'] as bool
+                                ? Icons.check
+                                : Icons.circle_outlined),
+                        color: isCancelled || step['completed'] as bool
                             ? Colors.white
                             : Theme.of(context)
                                 .colorScheme
@@ -436,9 +492,11 @@ class OrderTrackingPage extends StatelessWidget {
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: step['completed'] as bool
-                                        ? AppColors.textPrimary
-                                        : AppColors.textSecondary,
+                                    color: isCancelled
+                                        ? Colors.red
+                                        : (step['completed'] as bool
+                                            ? AppColors.textPrimary
+                                            : AppColors.textSecondary),
                                   ),
                         ),
                         const SizedBox(height: 4),
@@ -459,6 +517,10 @@ class OrderTrackingPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return '${dateTime.day} ${_getMonthName(dateTime.month)}, ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   Widget _buildInfoRow(BuildContext context, String label, String value) {

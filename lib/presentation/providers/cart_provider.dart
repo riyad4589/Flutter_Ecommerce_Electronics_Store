@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/datasources/cart_local_datasource.dart';
+import '../../data/datasources/cart_firebase_datasource.dart';
 import '../../data/models/cart_item_model.dart';
 import '../../data/models/product_model.dart';
 import '../../domain/entities/cart_item.dart';
@@ -8,10 +8,10 @@ import '../../domain/entities/product.dart';
 enum CartStatus { initial, loading, loaded, error }
 
 class CartProvider extends ChangeNotifier {
-  final CartLocalDataSource cartLocalDataSource;
+  final CartFirebaseDataSource cartFirebaseDataSource;
   String? _currentUserId;
 
-  CartProvider({required this.cartLocalDataSource});
+  CartProvider({required this.cartFirebaseDataSource});
 
   CartStatus _status = CartStatus.initial;
   List<CartItem> _cartItems = [];
@@ -42,7 +42,7 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _cartItems = await cartLocalDataSource.getCartItems(_currentUserId!);
+      _cartItems = await cartFirebaseDataSource.getCartItems(_currentUserId!);
       _status = CartStatus.loaded;
     } catch (e) {
       _status = CartStatus.error;
@@ -51,8 +51,8 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addToCart(Product product, {int quantity = 1}) async {
-    if (_currentUserId == null) return;
+  Future<bool> addToCart(Product product, {int quantity = 1}) async {
+    if (_currentUserId == null) return false;
 
     try {
       final productModel = ProductModel(
@@ -73,11 +73,13 @@ class CartProvider extends ChangeNotifier {
         quantity: quantity,
       );
 
-      await cartLocalDataSource.addToCart(_currentUserId!, cartItem);
+      await cartFirebaseDataSource.addToCart(_currentUserId!, cartItem);
       await loadCart();
+      return true;
     } catch (e) {
       _errorMessage = e.toString();
       notifyListeners();
+      return false;
     }
   }
 
@@ -85,7 +87,7 @@ class CartProvider extends ChangeNotifier {
     if (_currentUserId == null) return;
 
     try {
-      await cartLocalDataSource.updateCartItem(
+      await cartFirebaseDataSource.updateQuantity(
           _currentUserId!, productId, quantity);
       await loadCart();
     } catch (e) {
@@ -98,7 +100,7 @@ class CartProvider extends ChangeNotifier {
     if (_currentUserId == null) return;
 
     try {
-      await cartLocalDataSource.removeFromCart(_currentUserId!, productId);
+      await cartFirebaseDataSource.removeFromCart(_currentUserId!, productId);
       await loadCart();
     } catch (e) {
       _errorMessage = e.toString();
@@ -110,7 +112,7 @@ class CartProvider extends ChangeNotifier {
     if (_currentUserId == null) return;
 
     try {
-      await cartLocalDataSource.clearCart(_currentUserId!);
+      await cartFirebaseDataSource.clearCart(_currentUserId!);
       await loadCart();
     } catch (e) {
       _errorMessage = e.toString();

@@ -1,17 +1,19 @@
 import 'package:dio/dio.dart';
-import '../../data/datasources/auth_local_datasource.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CustomDioInterceptor extends Interceptor {
-  final AuthLocalDataSource authLocalDataSource;
-
-  CustomDioInterceptor(this.authLocalDataSource);
+  CustomDioInterceptor();
 
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = await authLocalDataSource.getToken();
-    if (token != null && token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
+    // Récupérer le token depuis Firebase Auth
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final token = await user.getIdToken();
+      if (token != null && token.isNotEmpty) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
     }
     super.onRequest(options, handler);
   }

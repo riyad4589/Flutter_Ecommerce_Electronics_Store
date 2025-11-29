@@ -1,0 +1,84 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Fonction utilitaire pour vérifier si l'utilisateur est authentifié
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Fonction pour vérifier si l'utilisateur est le propriétaire
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Fonction pour vérifier si l'utilisateur est admin (basé sur custom claim ou champ role)
+    function isAdmin() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Collection utilisateurs
+    match /users/{userId} {
+      // Lecture: propriétaire OU admin
+      allow get: if isOwner(userId) || isAdmin();
+      // Liste: admin seulement (pour requêtes comme orderBy)
+      allow list: if isAdmin();
+      // Création: utilisateur authentifié
+      allow create: if isAuthenticated();
+      // Mise à jour: propriétaire OU admin
+      allow update: if isOwner(userId) || isAdmin();
+      // Suppression: admin seulement
+      allow delete: if isAdmin();
+      
+      // Sous-collection panier
+      match /cart/{productId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      // Sous-collection favoris
+      match /favorites/{productId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      // Sous-collection commandes utilisateur
+      match /orders/{orderId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+    
+    // Collection produits - lecture publique
+    match /products/{productId} {
+      // Tout le monde peut lire les produits
+      allow read: if true;
+      // Les admins peuvent modifier
+      allow write: if isAdmin() || isAuthenticated();
+    }
+    
+    // Collection catégories - lecture publique
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin() || isAuthenticated();
+    }
+    
+    // Collection commandes globale
+    match /orders/{orderId} {
+      // Get: propriétaire de la commande OU admin
+      allow get: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      // Liste: admin peut lister toutes les commandes
+      allow list: if isAdmin();
+      // Création: utilisateur authentifié crée sa propre commande
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      // Mise à jour: propriétaire OU admin
+      allow update: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
+      // Suppression: admin seulement
+      allow delete: if isAdmin();
+      
+      // Sous-collection items de commande
+      match /items/{itemId} {
+        allow read, write: if isAuthenticated();
+      }
+    }
+  }
+}

@@ -6,7 +6,6 @@ import '../../providers/auth_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../themes/app_colors.dart';
 import '../../widgets/common/custom_button.dart';
-import 'database_viewer_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -86,18 +85,25 @@ class SettingsPage extends StatelessWidget {
           _buildSectionHeader(context, 'À propos'),
           _buildListTile(
             context,
-            icon: Icons.storage,
-            title: 'Base de données',
-            subtitle: 'Voir les données locales',
-            trailing: const Icon(Icons.chevron_right),
+            icon: Icons.cloud,
+            title: 'Stockage Cloud',
+            subtitle: 'Données synchronisées avec Firebase',
+            trailing: const Icon(Icons.check_circle, color: Colors.green),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DatabaseViewerPage(),
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Vos données sont synchronisées avec Firebase'),
+                  backgroundColor: Colors.green,
                 ),
               );
             },
+          ),
+          _buildListTile(
+            context,
+            icon: Icons.info_outline,
+            title: 'Version',
+            subtitle: '1.0.0 (Firebase)',
+            onTap: () {},
           ),
 
           const SizedBox(height: 32),

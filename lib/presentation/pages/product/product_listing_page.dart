@@ -6,6 +6,7 @@ import '../../../domain/entities/product.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/product_provider.dart';
 import '../../providers/cart_provider.dart';
+import '../../providers/category_provider.dart';
 import '../../widgets/common/skeleton_loader.dart';
 
 class ProductListingPage extends StatefulWidget {
@@ -32,6 +33,7 @@ class _ProductListingPageState extends State<ProductListingPage> {
       }
 
       context.read<ProductProvider>().loadProducts();
+      context.read<CategoryProvider>().loadCategories();
     });
   }
 
@@ -43,6 +45,7 @@ class _ProductListingPageState extends State<ProductListingPage> {
 
   Future<void> _refreshProducts() async {
     await context.read<ProductProvider>().loadProducts();
+    await context.read<CategoryProvider>().loadCategories();
   }
 
   void _showSortDialog() {
@@ -105,121 +108,48 @@ class _ProductListingPageState extends State<ProductListingPage> {
   }
 
   void _showFilterDialog() {
+    final categoryProvider = context.read<CategoryProvider>();
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Filtrer par catégorie'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CheckboxListTile(
-                title: const Text('📱 Smartphones'),
-                value: _selectedCategories.contains('smartphones'),
-                onChanged: (value) {
-                  setState(() {
-                    if (value == true) {
-                      _selectedCategories.add('smartphones');
-                    } else {
-                      _selectedCategories.remove('smartphones');
-                    }
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('💻 Ordinateurs'),
-                value: _selectedCategories.contains('ordinateurs'),
-                onChanged: (value) {
-                  setState(() {
-                    if (value == true) {
-                      _selectedCategories.add('ordinateurs');
-                    } else {
-                      _selectedCategories.remove('ordinateurs');
-                    }
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('📲 Tablettes'),
-                value: _selectedCategories.contains('tablettes'),
-                onChanged: (value) {
-                  setState(() {
-                    if (value == true) {
-                      _selectedCategories.add('tablettes');
-                    } else {
-                      _selectedCategories.remove('tablettes');
-                    }
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('🎧 Audio'),
-                value: _selectedCategories.contains('audio'),
-                onChanged: (value) {
-                  setState(() {
-                    if (value == true) {
-                      _selectedCategories.add('audio');
-                    } else {
-                      _selectedCategories.remove('audio');
-                    }
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('📷 Photo & Vidéo'),
-                value: _selectedCategories.contains('photo_video'),
-                onChanged: (value) {
-                  setState(() {
-                    if (value == true) {
-                      _selectedCategories.add('photo_video');
-                    } else {
-                      _selectedCategories.remove('photo_video');
-                    }
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('🎮 Gaming'),
-                value: _selectedCategories.contains('gaming'),
-                onChanged: (value) {
-                  setState(() {
-                    if (value == true) {
-                      _selectedCategories.add('gaming');
-                    } else {
-                      _selectedCategories.remove('gaming');
-                    }
-                  });
-                },
-              ),
-              CheckboxListTile(
-                title: const Text('🔌 Accessoires'),
-                value: _selectedCategories.contains('accessoires'),
-                onChanged: (value) {
-                  setState(() {
-                    if (value == true) {
-                      _selectedCategories.add('accessoires');
-                    } else {
-                      _selectedCategories.remove('accessoires');
-                    }
-                  });
-                },
-              ),
-            ],
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Filtrer par catégorie'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: categoryProvider.categories.map((category) {
+                return CheckboxListTile(
+                  title: Text(category.name),
+                  value: _selectedCategories.contains(category.id),
+                  onChanged: (value) {
+                    setDialogState(() {
+                      if (value == true) {
+                        _selectedCategories.add(category.id);
+                      } else {
+                        _selectedCategories.remove(category.id);
+                      }
+                    });
+                    setState(() {});
+                  },
+                );
+              }).toList(),
+            ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() => _selectedCategories.clear());
+                Navigator.pop(dialogContext);
+              },
+              child: const Text('Réinitialiser'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('Appliquer'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() => _selectedCategories.clear());
-              Navigator.pop(context);
-            },
-            child: const Text('Réinitialiser'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Appliquer'),
-          ),
-        ],
       ),
     );
   }

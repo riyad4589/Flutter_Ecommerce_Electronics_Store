@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../data/datasources/theme_local_datasource.dart';
+import '../../data/datasources/theme_firebase_datasource.dart';
 
 enum AppThemeMode { light, dark, system }
 
 class ThemeProvider with ChangeNotifier {
-  final ThemeLocalDataSource themeLocalDataSource;
+  final ThemeFirebaseDataSource themeFirebaseDataSource;
   String? _currentUserId;
 
   AppThemeMode _themeMode = AppThemeMode.light;
 
-  ThemeProvider({required this.themeLocalDataSource});
+  ThemeProvider({required this.themeFirebaseDataSource});
 
   AppThemeMode get themeMode => _themeMode;
 
@@ -45,7 +45,7 @@ class ThemeProvider with ChangeNotifier {
 
     try {
       final savedTheme =
-          await themeLocalDataSource.getThemeMode(_currentUserId!);
+          await themeFirebaseDataSource.getThemeMode(_currentUserId!);
       if (savedTheme != null) {
         _themeMode = _parseThemeMode(savedTheme);
         notifyListeners();
@@ -61,7 +61,7 @@ class ThemeProvider with ChangeNotifier {
 
     if (_currentUserId != null) {
       try {
-        await themeLocalDataSource.saveThemeMode(
+        await themeFirebaseDataSource.saveThemeMode(
             _currentUserId!, _themeModeToString(mode));
       } catch (e) {
         // Ignorer les erreurs de sauvegarde
