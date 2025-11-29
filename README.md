@@ -106,7 +106,7 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 
 ---
 
-## 🛠️ Technologies utilisées
+<h2 id="technologies-utilisees">🛠️ Technologies utilisées</h2>
 
 ### Framework & Langage
 - **Flutter** 3.0+ - Framework UI multiplateforme
@@ -139,7 +139,7 @@ Une application e-commerce spécialisée en électronique développée avec Flut
 
 ---
 
-## 🏗️ Architecture
+<h2 id="architecture">🏗️ Architecture</h2>
 
 Le projet suit les principes de **Clean Architecture** avec une séparation claire des responsabilités :
 
