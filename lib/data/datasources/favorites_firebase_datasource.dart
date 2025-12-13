@@ -57,7 +57,7 @@ class FavoritesFirebaseDataSourceImpl implements FavoritesFirebaseDataSource {
         );
       }).toList();
     } catch (e) {
-      throw CacheException(message: 'Erreur lors de la récupération des favoris');
+      throw const CacheException(message: 'Erreur lors de la récupération des favoris');
     }
   }
 
@@ -65,7 +65,7 @@ class FavoritesFirebaseDataSourceImpl implements FavoritesFirebaseDataSource {
   Future<void> addToFavorites(String userId, ProductModel product) async {
     try {
       if (userId.isEmpty) {
-        throw CacheException(message: 'Utilisateur non connecté');
+        throw const CacheException(message: 'Utilisateur non connecté');
       }
       
       await _favoritesCollection(userId).doc(product.id).set({
@@ -83,7 +83,7 @@ class FavoritesFirebaseDataSourceImpl implements FavoritesFirebaseDataSource {
       });
     } catch (e) {
       if (e is CacheException) rethrow;
-      throw CacheException(message: 'Erreur lors de l\'ajout aux favoris');
+      throw const CacheException(message: 'Erreur lors de l\'ajout aux favoris');
     }
   }
 
@@ -91,13 +91,13 @@ class FavoritesFirebaseDataSourceImpl implements FavoritesFirebaseDataSource {
   Future<void> removeFromFavorites(String userId, String productId) async {
     try {
       if (userId.isEmpty) {
-        throw CacheException(message: 'Utilisateur non connecté');
+        throw const CacheException(message: 'Utilisateur non connecté');
       }
       
       await _favoritesCollection(userId).doc(productId).delete();
     } catch (e) {
       if (e is CacheException) rethrow;
-      throw CacheException(message: 'Erreur lors de la suppression du favori');
+      throw const CacheException(message: 'Erreur lors de la suppression du favori');
     }
   }
 
@@ -127,7 +127,7 @@ class FavoritesFirebaseDataSourceImpl implements FavoritesFirebaseDataSource {
       
       await batch.commit();
     } catch (e) {
-      throw CacheException(message: 'Erreur lors du vidage des favoris');
+      throw const CacheException(message: 'Erreur lors du vidage des favoris');
     }
   }
 

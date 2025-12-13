@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/product.dart';
 import '../../data/datasources/product_remote_datasource.dart';
 import '../../data/datasources/product_firebase_datasource.dart';
+import '../../data/datasources/product_local_datasource.dart';
+import '../../data/models/product_model.dart';
 
 enum ProductStatus { initial, loading, loaded, error }
 
 class ProductProvider extends ChangeNotifier {
   final ProductRemoteDataSource productRemoteDataSource;
   final ProductFirebaseDataSource productFirebaseDataSource;
+  final ProductLocalDataSource productLocalDataSource;
 
   ProductProvider({
     required this.productRemoteDataSource,
     required this.productFirebaseDataSource,
+    required this.productLocalDataSource,
   });
 
   ProductStatus _status = ProductStatus.initial;
@@ -30,12 +34,22 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // D'abord essayer de charger depuis l'API mock
+      // Priorité: remote API -> Firebase -> local cache
       try {
         _products = await productRemoteDataSource.getAllProducts();
-      } catch (e) {
-        // Si l'API échoue, charger depuis Firebase
-        _products = await productFirebaseDataSource.getProducts();
+        // cache locally
+        await productLocalDataSource.cacheProducts(
+            _products.map((p) => ProductModel.fromEntity(p)).toList());
+      } catch (e1) {
+        try {
+          _products = await productFirebaseDataSource.getProducts();
+          await productLocalDataSource.cacheProducts(
+              _products.map((p) => ProductModel.fromEntity(p)).toList());
+        } catch (e2) {
+          // fallback local
+          final local = await productLocalDataSource.getProducts();
+          _products = local.map((m) => m.toEntity()).toList();
+        }
       }
 
       _status = ProductStatus.loaded;
@@ -52,14 +66,18 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // D'abord essayer de charger depuis l'API mock
+      // Priorité: remote -> firebase -> local
       try {
-        _selectedProduct =
-            await productRemoteDataSource.getProductById(productId);
-      } catch (e) {
-        // Si l'API échoue, charger depuis Firebase
-        _selectedProduct =
-            await productFirebaseDataSource.getProductById(productId);
+        final p = await productRemoteDataSource.getProductById(productId);
+        _selectedProduct = p;
+      } catch (e1) {
+        try {
+          final p = await productFirebaseDataSource.getProductById(productId);
+          _selectedProduct = p;
+        } catch (e2) {
+          final local = await productLocalDataSource.getProductById(productId);
+          _selectedProduct = local?.toEntity();
+        }
       }
 
       _status = ProductStatus.loaded;

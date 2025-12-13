@@ -55,7 +55,7 @@ class OrdersFirebaseDataSourceImpl implements OrdersFirebaseDataSource {
         snapshot.docs.map((doc) => _orderFromSnapshot(doc)).toList(),
       );
     } catch (e) {
-      throw CacheException(message: 'Erreur lors de la récupération des commandes');
+      throw const CacheException(message: 'Erreur lors de la récupération des commandes');
     }
   }
 
@@ -67,7 +67,7 @@ class OrdersFirebaseDataSourceImpl implements OrdersFirebaseDataSource {
       
       return await _orderFromSnapshot(doc);
     } catch (e) {
-      throw CacheException(message: 'Erreur lors de la récupération de la commande');
+      throw const CacheException(message: 'Erreur lors de la récupération de la commande');
     }
   }
 
@@ -75,7 +75,7 @@ class OrdersFirebaseDataSourceImpl implements OrdersFirebaseDataSource {
   Future<OrderModel> createOrder(String userId, List<CartItemModel> items, double totalAmount) async {
     try {
       if (userId.isEmpty) {
-        throw CacheException(message: 'Utilisateur non connecté');
+        throw const CacheException(message: 'Utilisateur non connecté');
       }
       
       final orderId = _ordersCollection.doc().id;
@@ -123,7 +123,7 @@ class OrdersFirebaseDataSourceImpl implements OrdersFirebaseDataSource {
       );
     } catch (e) {
       if (e is CacheException) rethrow;
-      throw CacheException(message: 'Erreur lors de la création de la commande');
+      throw const CacheException(message: 'Erreur lors de la création de la commande');
     }
   }
 
@@ -135,7 +135,7 @@ class OrdersFirebaseDataSourceImpl implements OrdersFirebaseDataSource {
         'updatedAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      throw CacheException(message: 'Erreur lors de la mise à jour du statut');
+      throw const CacheException(message: 'Erreur lors de la mise à jour du statut');
     }
   }
 
@@ -144,7 +144,7 @@ class OrdersFirebaseDataSourceImpl implements OrdersFirebaseDataSource {
     try {
       await updateOrderStatus(orderId, OrderStatus.cancelled);
     } catch (e) {
-      throw CacheException(message: 'Erreur lors de l\'annulation de la commande');
+      throw const CacheException(message: 'Erreur lors de l\'annulation de la commande');
     }
   }
 
@@ -165,7 +165,7 @@ class OrdersFirebaseDataSourceImpl implements OrdersFirebaseDataSource {
       
       await batch.commit();
     } catch (e) {
-      throw CacheException(message: 'Erreur lors de la suppression de la commande');
+      throw const CacheException(message: 'Erreur lors de la suppression de la commande');
     }
   }
 
@@ -197,7 +197,7 @@ class OrdersFirebaseDataSourceImpl implements OrdersFirebaseDataSource {
         snapshot.docs.map((doc) => _orderFromSnapshot(doc)).toList(),
       );
     } catch (e) {
-      throw CacheException(message: 'Erreur lors de la récupération des commandes');
+      throw const CacheException(message: 'Erreur lors de la récupération des commandes');
     }
   }
 

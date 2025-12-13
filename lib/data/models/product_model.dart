@@ -76,6 +76,27 @@ class ProductModel extends Product {
     };
   }
 
+  Map<String, dynamic> toMap() => toJson();
+
+  factory ProductModel.fromMap(Map<String, dynamic> map) {
+    return ProductModel.fromJson(map);
+  }
+
+  Product toEntity() {
+    return Product(
+      id: id,
+      name: name,
+      description: description,
+      price: price,
+      discountPrice: discountPrice,
+      imageUrl: imageUrl,
+      categoryId: categoryId,
+      brand: brand,
+      rating: rating,
+      reviewCount: reviewCount,
+    );
+  }
+
   factory ProductModel.fromEntity(Product product) {
     return ProductModel(
       id: product.id,

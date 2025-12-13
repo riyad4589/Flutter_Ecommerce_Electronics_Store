@@ -5,7 +5,6 @@ import '../../domain/entities/order.dart' as entities;
 import '../../domain/repositories/orders_repository.dart';
 import '../datasources/orders_firebase_datasource.dart';
 import '../models/cart_item_model.dart';
-import '../models/order_model.dart';
 
 /// Implémentation du repository des commandes utilisant Firebase
 class OrdersRepositoryFirebaseImpl implements OrdersRepository {
@@ -27,7 +26,7 @@ class OrdersRepositoryFirebaseImpl implements OrdersRepository {
         return const Left(NetworkFailure());
       }
     } catch (e) {
-      return Left(ServerFailure(
+      return const Left(ServerFailure(
           message: 'Erreur lors de la récupération des commandes'));
     }
   }
@@ -51,7 +50,7 @@ class OrdersRepositoryFirebaseImpl implements OrdersRepository {
         return const Left(NetworkFailure());
       }
     } catch (e) {
-      return Left(
+      return const Left(
           ServerFailure(message: 'Erreur lors de la création de la commande'));
     }
   }
@@ -70,7 +69,7 @@ class OrdersRepositoryFirebaseImpl implements OrdersRepository {
         return const Left(NetworkFailure());
       }
     } catch (e) {
-      return Left(ServerFailure(
+      return const Left(ServerFailure(
           message: 'Erreur lors de la récupération de la commande'));
     }
   }
@@ -85,7 +84,7 @@ class OrdersRepositoryFirebaseImpl implements OrdersRepository {
         return const Left(NetworkFailure());
       }
     } catch (e) {
-      return Left(ServerFailure(
+      return const Left(ServerFailure(
           message: 'Erreur lors de l\'annulation de la commande'));
     }
   }
@@ -100,7 +99,7 @@ class OrdersRepositoryFirebaseImpl implements OrdersRepository {
         return const Left(NetworkFailure());
       }
     } catch (e) {
-      return Left(ServerFailure(
+      return const Left(ServerFailure(
           message: 'Erreur lors de la suppression de la commande'));
     }
   }

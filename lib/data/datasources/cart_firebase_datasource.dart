@@ -59,7 +59,7 @@ class CartFirebaseDataSourceImpl implements CartFirebaseDataSource {
         );
       }).toList();
     } catch (e) {
-      throw CacheException(message: 'Erreur lors de la récupération du panier');
+      throw const CacheException(message: 'Erreur lors de la récupération du panier');
     }
   }
 
@@ -67,7 +67,7 @@ class CartFirebaseDataSourceImpl implements CartFirebaseDataSource {
   Future<void> addToCart(String userId, CartItemModel item) async {
     try {
       if (userId.isEmpty) {
-        throw CacheException(message: 'Utilisateur non connecté');
+        throw const CacheException(message: 'Utilisateur non connecté');
       }
 
       final productId = item.product.id;
@@ -103,7 +103,7 @@ class CartFirebaseDataSourceImpl implements CartFirebaseDataSource {
       }
     } catch (e) {
       if (e is CacheException) rethrow;
-      throw CacheException(message: 'Erreur lors de l\'ajout au panier');
+      throw const CacheException(message: 'Erreur lors de l\'ajout au panier');
     }
   }
 
@@ -112,7 +112,7 @@ class CartFirebaseDataSourceImpl implements CartFirebaseDataSource {
       String userId, String productId, int quantity) async {
     try {
       if (userId.isEmpty) {
-        throw CacheException(message: 'Utilisateur non connecté');
+        throw const CacheException(message: 'Utilisateur non connecté');
       }
 
       if (quantity <= 0) {
@@ -126,7 +126,7 @@ class CartFirebaseDataSourceImpl implements CartFirebaseDataSource {
       });
     } catch (e) {
       if (e is CacheException) rethrow;
-      throw CacheException(
+      throw const CacheException(
           message: 'Erreur lors de la mise à jour de la quantité');
     }
   }
@@ -135,13 +135,13 @@ class CartFirebaseDataSourceImpl implements CartFirebaseDataSource {
   Future<void> removeFromCart(String userId, String productId) async {
     try {
       if (userId.isEmpty) {
-        throw CacheException(message: 'Utilisateur non connecté');
+        throw const CacheException(message: 'Utilisateur non connecté');
       }
 
       await _cartCollection(userId).doc(productId).delete();
     } catch (e) {
       if (e is CacheException) rethrow;
-      throw CacheException(message: 'Erreur lors de la suppression du produit');
+      throw const CacheException(message: 'Erreur lors de la suppression du produit');
     }
   }
 
@@ -159,7 +159,7 @@ class CartFirebaseDataSourceImpl implements CartFirebaseDataSource {
 
       await batch.commit();
     } catch (e) {
-      throw CacheException(message: 'Erreur lors du vidage du panier');
+      throw const CacheException(message: 'Erreur lors du vidage du panier');
     }
   }
 

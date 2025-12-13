@@ -454,19 +454,31 @@ Ce script crée :
 
 # 👤 Contributeurs
 
-**MAJGHIROU Mohamed Riyad**
+<p align="center">
+<table align="center">
+<tr>
+<td align="center" width="300">
+<a href="https://github.com/riyad4589">
+<img src="https://github.com/riyad4589.png" width="150px;" style="border-radius: 50%;" alt="Mohamed Riyad MAJGHIROU"/><br /><br />
+<b style="font-size: 18px;">Mohamed Riyad MAJGHIROU</b>
+</a><br /><br />
+<a href="mailto:riyadmaj10@gmail.com">📧 Email</a> •
+<a href="https://www.linkedin.com/in/mohamed-riyad-majghirou-5b62aa388/">💼 LinkedIn</a>
+<a href="https://www.riyadmaj.com/">🌐 Portfolio</a>
 
-- GitHub: [@riyad4589](https://github.com/riyad4589)
-- Email: [riyadmaj10@gmail.com](mailto:riyadmaj10@gmail.com)
-- LinkedIn: [Mohamed Riyad MAJGHIROU](https://www.linkedin.com/in/mohamed-riyad-majghirou-5b62aa388/)
-
-
-**AZZAM Mohamed**
-
-- GitHub: [@Azzammoo10](https://github.com/Azzammoo10)
-- Email: [azzam.moo10@gmail.com](mailto:azzam.moo10@gmail.com)
-- LinkedIn: [Mohamed AZZAM](https://www.linkedin.com/in/mohamed-azzam-93115823a/)
-
+</td>
+<td align="center" width="300">
+<a href="https://github.com/Azzammoo10">
+<img src="https://github.com/Azzammoo10.png" width="150px;" style="border-radius: 50%;" alt="Mohamed AZZAM"/><br /><br />
+<b style="font-size: 18px;">Mohamed AZZAM</b>
+</a><br /><br />
+<a href="mailto:azzam.moo10@gmail.com">📧 Email</a> •
+<a href="https://www.linkedin.com/in/mohamed-azzam-93115823a/">💼 LinkedIn</a> •
+<a href="https://azzammo.com">🌐 Portfolio</a>
+</td>
+</tr>
+</table>
+</p>
 ---
 
 <div align="center">

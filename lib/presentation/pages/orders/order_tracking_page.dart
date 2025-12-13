@@ -247,7 +247,7 @@ class OrderTrackingPage extends StatelessWidget {
                                     ],
                                   ),
                                 ))
-                            .toList(),
+                            ,
                         const Divider(),
                         const SizedBox(height: 8),
                         Row(

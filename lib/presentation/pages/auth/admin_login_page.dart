@@ -64,14 +64,14 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFF1A237E),
-              const Color(0xFF0D47A1),
-              const Color(0xFF01579B),
+              Color(0xFF1A237E),
+              Color(0xFF0D47A1),
+              Color(0xFF01579B),
             ],
           ),
         ),

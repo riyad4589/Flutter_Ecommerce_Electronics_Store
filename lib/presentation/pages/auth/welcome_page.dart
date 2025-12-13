@@ -93,7 +93,7 @@ class WelcomePage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.admin_panel_settings_rounded,
                             size: 28,
                           ),
@@ -131,7 +131,7 @@ class WelcomePage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.person_rounded,
                             size: 28,
                           ),
@@ -151,7 +151,7 @@ class WelcomePage extends StatelessWidget {
 
                   // Footer
                   Text(
-                    '© 2024 E-Commerce App',
+                    '© 2025 E-Commerce App',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: Colors.white.withOpacity(0.7),
                     ),

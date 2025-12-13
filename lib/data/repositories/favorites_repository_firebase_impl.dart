@@ -17,7 +17,7 @@ class FavoritesRepositoryFirebaseImpl implements FavoritesRepository {
       final favorites = await firebaseDataSource.getFavorites(userId);
       return Right(favorites);
     } catch (e) {
-      return Left(CacheFailure(message: 'Erreur lors de la récupération des favoris'));
+      return const Left(CacheFailure(message: 'Erreur lors de la récupération des favoris'));
     }
   }
 
@@ -39,7 +39,7 @@ class FavoritesRepositoryFirebaseImpl implements FavoritesRepository {
       await firebaseDataSource.addToFavorites(userId, productModel);
       return const Right(null);
     } catch (e) {
-      return Left(CacheFailure(message: 'Erreur lors de l\'ajout aux favoris'));
+      return const Left(CacheFailure(message: 'Erreur lors de l\'ajout aux favoris'));
     }
   }
 
@@ -49,7 +49,7 @@ class FavoritesRepositoryFirebaseImpl implements FavoritesRepository {
       await firebaseDataSource.removeFromFavorites(userId, productId);
       return const Right(null);
     } catch (e) {
-      return Left(CacheFailure(message: 'Erreur lors de la suppression du favori'));
+      return const Left(CacheFailure(message: 'Erreur lors de la suppression du favori'));
     }
   }
 
@@ -59,7 +59,7 @@ class FavoritesRepositoryFirebaseImpl implements FavoritesRepository {
       final result = await firebaseDataSource.isFavorite(userId, productId);
       return Right(result);
     } catch (e) {
-      return Left(CacheFailure(message: 'Erreur lors de la vérification'));
+      return const Left(CacheFailure(message: 'Erreur lors de la vérification'));
     }
   }
 }

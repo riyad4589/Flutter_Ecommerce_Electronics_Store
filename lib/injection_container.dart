@@ -12,6 +12,7 @@ import 'data/datasources/orders_firebase_datasource.dart';
 import 'data/datasources/product_firebase_datasource.dart';
 import 'data/datasources/product_remote_datasource.dart';
 import 'data/datasources/theme_firebase_datasource.dart';
+import 'data/datasources/product_local_datasource.dart';
 import 'data/repositories/auth_repository_firebase_impl.dart';
 import 'data/repositories/favorites_repository_firebase_impl.dart';
 import 'data/repositories/orders_repository_firebase_impl.dart';
@@ -78,6 +79,10 @@ Future<void> init() async {
   sl.registerLazySingleton<ProductFirebaseDataSource>(
     () => ProductFirebaseDataSourceImpl(),
   );
+  // Local (SQLite) datasource for products
+  final productLocal = ProductLocalDataSourceImpl();
+  await productLocal.init();
+  sl.registerLazySingleton<ProductLocalDataSource>(() => productLocal);
   sl.registerLazySingleton<ThemeFirebaseDataSource>(
     () => ThemeFirebaseDataSourceImpl(),
   );
@@ -117,6 +122,7 @@ Future<void> init() async {
   sl.registerFactory(() => ProductProvider(
         productRemoteDataSource: sl(),
         productFirebaseDataSource: sl(),
+        productLocalDataSource: sl(),
       ));
   sl.registerFactory(() => CartProvider(
         cartFirebaseDataSource: sl(),

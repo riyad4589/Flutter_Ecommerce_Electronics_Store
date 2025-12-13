@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ThemeAwareImage(
+                const ThemeAwareImage(
                   lightImagePath: 'assets/images/light.png',
                   darkImagePath: 'assets/images/dark.png',
                   width: 200,

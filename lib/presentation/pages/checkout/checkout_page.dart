@@ -23,7 +23,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final _postalCodeController = TextEditingController();
   final _phoneController = TextEditingController();
 
-  String _paymentMethod = 'cash';
+  final String _paymentMethod = 'cash';
   bool _isProcessing = false;
 
   @override
@@ -298,7 +298,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       title: const Text('Paiement à la livraison'),
                       subtitle: const Text('Espèces ou carte'),
                       value: 'cash',
-                      secondary: Icon(
+                      secondary: const Icon(
                         Icons.money,
                         color: AppColors.primary,
                         size: 32,

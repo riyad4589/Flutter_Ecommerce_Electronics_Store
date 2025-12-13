@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'firebase_options.dart';
 import 'core/constants/app_constants.dart';
 import 'core/utils/app_router.dart';
@@ -21,6 +22,22 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Activer Firebase App Check (mode DEV: debug provider)
+  // En développement, on utilise le provider debug pour éviter la configuration
+  // Play Integrity / DeviceCheck. En production, remplace par PlayIntegrity/DeviceCheck.
+  try {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.debug,
+      appleProvider: AppleProvider.debug,
+    );
+  } catch (e) {
+    // Ne bloque pas l'initialisation si App Check échoue — log pour debug
+    // Le message "No AppCheckProvider installed" disparaîtra après activation.
+    // Garde ici un print pour diagnostics durant le dev.
+    // ignore: avoid_print
+    print('Firebase App Check activation failed: $e');
+  }
 
   await di.init();
 

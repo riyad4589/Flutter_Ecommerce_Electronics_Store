@@ -24,6 +24,7 @@ dependencies:
   firebase_auth: ^5.7.0
   cloud_firestore: ^5.6.7
   firebase_storage: ^12.4.10
+  firebase_app_check: ^0.3.2+10
 
   # Networking (pour API externe si nécessaire)
   dio: ^5.4.3+1
@@ -32,6 +33,7 @@ dependencies:
   # Local Storage (gardé pour cache local si besoin)
   path_provider: ^2.1.3
   path: ^1.8.3
+  sqflite: ^2.2.8
 
   # Image handling
   image_picker: ^1.0.7

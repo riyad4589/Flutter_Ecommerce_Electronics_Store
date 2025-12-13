@@ -22,4 +22,11 @@ class CategoryModel extends Category {
       'imageUrl': imageUrl,
     };
   }
+
+  Map<String, dynamic> toMap() => toJson();
+
+  factory CategoryModel.fromMap(Map<String, dynamic> map) =>
+      CategoryModel.fromJson(map);
+
+  Category toEntity() => Category(id: id, name: name, imageUrl: imageUrl);
 }

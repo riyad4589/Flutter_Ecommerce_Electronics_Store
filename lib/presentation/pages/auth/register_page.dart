@@ -176,7 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ? FileImage(_profileImage!)
                         : null,
                     child: _profileImage == null
-                        ? Icon(
+                        ? const Icon(
                             Icons.add_a_photo,
                             size: 40,
                             color: AppColors.primary,

@@ -57,7 +57,7 @@ class ProductFirebaseDataSourceImpl implements ProductFirebaseDataSource {
       
       return snapshot.docs.map((doc) => _productFromDoc(doc)).toList();
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de la récupération des produits');
+      throw const ServerException(message: 'Erreur lors de la récupération des produits');
     }
   }
 
@@ -71,7 +71,7 @@ class ProductFirebaseDataSourceImpl implements ProductFirebaseDataSource {
       
       return snapshot.docs.map((doc) => _productFromDoc(doc)).toList();
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de la récupération des produits');
+      throw const ServerException(message: 'Erreur lors de la récupération des produits');
     }
   }
 
@@ -83,7 +83,7 @@ class ProductFirebaseDataSourceImpl implements ProductFirebaseDataSource {
       
       return _productFromDoc(doc);
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de la récupération du produit');
+      throw const ServerException(message: 'Erreur lors de la récupération du produit');
     }
   }
 
@@ -106,7 +106,7 @@ class ProductFirebaseDataSourceImpl implements ProductFirebaseDataSource {
               product.brand.toLowerCase().contains(queryLower))
           .toList();
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de la recherche');
+      throw const ServerException(message: 'Erreur lors de la recherche');
     }
   }
 
@@ -126,7 +126,7 @@ class ProductFirebaseDataSourceImpl implements ProductFirebaseDataSource {
         );
       }).toList();
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de la récupération des catégories');
+      throw const ServerException(message: 'Erreur lors de la récupération des catégories');
     }
   }
 
@@ -166,7 +166,7 @@ class ProductFirebaseDataSourceImpl implements ProductFirebaseDataSource {
         reviewCount: product.reviewCount,
       );
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de l\'ajout du produit');
+      throw const ServerException(message: 'Erreur lors de l\'ajout du produit');
     }
   }
 
@@ -186,7 +186,7 @@ class ProductFirebaseDataSourceImpl implements ProductFirebaseDataSource {
         'updatedAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de la mise à jour du produit');
+      throw const ServerException(message: 'Erreur lors de la mise à jour du produit');
     }
   }
 
@@ -195,7 +195,7 @@ class ProductFirebaseDataSourceImpl implements ProductFirebaseDataSource {
     try {
       await _productsCollection.doc(productId).delete();
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de la suppression du produit');
+      throw const ServerException(message: 'Erreur lors de la suppression du produit');
     }
   }
 

@@ -38,34 +38,34 @@ class ProductCardSkeleton extends StatelessWidget {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Image skeleton
-          const SkeletonLoader(
+          SkeletonLoader(
             width: double.infinity,
             height: 120,
             borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
           ),
           Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: EdgeInsets.all(12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Title skeleton
-                const SkeletonLoader(
+                SkeletonLoader(
                   width: double.infinity,
                   height: 16,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 // Price skeleton
-                const SkeletonLoader(
+                SkeletonLoader(
                   width: 80,
                   height: 14,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 // Rating skeleton
-                const Row(
+                Row(
                   children: [
                     SkeletonLoader(
                       width: 60,
@@ -161,15 +161,15 @@ class CategoryCardSkeleton extends StatelessWidget {
     return Container(
       width: 120,
       margin: const EdgeInsets.only(right: 12),
-      child: Column(
+      child: const Column(
         children: [
-          const SkeletonLoader(
+          SkeletonLoader(
             width: 120,
             height: 120,
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
-          const SizedBox(height: 8),
-          const SkeletonLoader(
+          SizedBox(height: 8),
+          SkeletonLoader(
             width: 80,
             height: 14,
           ),

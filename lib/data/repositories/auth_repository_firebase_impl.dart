@@ -61,7 +61,7 @@ class AuthRepositoryFirebaseImpl implements AuthRepository {
       await firebaseDataSource.logout();
       return const Right(null);
     } catch (e) {
-      return Left(ServerFailure(message: 'Erreur lors de la déconnexion'));
+      return const Left(ServerFailure(message: 'Erreur lors de la déconnexion'));
     }
   }
 
@@ -73,7 +73,7 @@ class AuthRepositoryFirebaseImpl implements AuthRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } catch (e) {
-      return Left(ServerFailure(message: 'Erreur lors de la récupération de l\'utilisateur'));
+      return const Left(ServerFailure(message: 'Erreur lors de la récupération de l\'utilisateur'));
     }
   }
 
@@ -93,7 +93,7 @@ class AuthRepositoryFirebaseImpl implements AuthRepository {
       } on ServerException catch (e) {
         return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
       } catch (e) {
-        return Left(ServerFailure(message: 'Erreur lors de la mise à jour du profil'));
+        return const Left(ServerFailure(message: 'Erreur lors de la mise à jour du profil'));
       }
     } else {
       return const Left(NetworkFailure());

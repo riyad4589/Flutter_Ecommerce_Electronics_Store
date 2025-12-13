@@ -13,7 +13,7 @@ class AdminDashboardPage extends StatefulWidget {
 }
 
 class _AdminDashboardPageState extends State<AdminDashboardPage> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
 
   final List<Widget> _pages = [
     const UsersManagementTab(),
@@ -501,7 +501,7 @@ class _UsersManagementTabState extends State<UsersManagementTab> {
               decoration: BoxDecoration(
                 color: Theme.of(context)
                     .colorScheme
-                    .surfaceVariant
+                    .surfaceContainerHighest
                     .withOpacity(0.3),
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -1129,7 +1129,7 @@ class _ProductsManagementTabState extends State<ProductsManagementTab> {
                           icon: const Icon(Icons.delete, size: 18),
                           style: IconButton.styleFrom(
                             foregroundColor: Colors.red,
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             minimumSize: const Size(36, 36),
                           ),
                         ),
@@ -1408,7 +1408,7 @@ class _ProductsByClientTabState extends State<ProductsByClientTab> {
                     color: Colors.purple.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.people_outline,
                     color: Colors.purple,
                     size: 28,
@@ -1518,7 +1518,7 @@ class _ProductsByClientTabState extends State<ProductsByClientTab> {
                                   decoration: BoxDecoration(
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .surfaceVariant
+                                        .surfaceContainerHighest
                                         .withOpacity(0.3),
                                     borderRadius: const BorderRadius.only(
                                       bottomLeft: Radius.circular(16),
@@ -1602,7 +1602,7 @@ class _ProductsByClientTabState extends State<ProductsByClientTab> {
                                             ],
                                           ),
                                         );
-                                      }).toList(),
+                                      }),
                                       const SizedBox(height: 12),
                                       const Divider(),
                                       const SizedBox(height: 12),
@@ -1830,7 +1830,7 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
                     color: Colors.blue.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.receipt_long,
                     color: Colors.blue,
                     size: 28,
@@ -2126,7 +2126,7 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
                     ],
                   ),
                 );
-              }).toList(),
+              }),
               const Divider(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -52,7 +52,7 @@ class AuthFirebaseDataSourceImpl implements AuthFirebaseDataSource {
       );
 
       if (userCredential.user == null) {
-        throw ServerException(message: 'Échec de la connexion');
+        throw const ServerException(message: 'Échec de la connexion');
       }
 
       // Récupérer les données utilisateur depuis Firestore
@@ -60,7 +60,7 @@ class AuthFirebaseDataSourceImpl implements AuthFirebaseDataSource {
           await _usersCollection.doc(userCredential.user!.uid).get();
 
       if (!userDoc.exists) {
-        throw ServerException(
+        throw const ServerException(
             message: 'Utilisateur non trouvé dans la base de données');
       }
 
@@ -93,7 +93,7 @@ class AuthFirebaseDataSourceImpl implements AuthFirebaseDataSource {
       );
 
       if (userCredential.user == null) {
-        throw ServerException(message: 'Échec de la création du compte');
+        throw const ServerException(message: 'Échec de la création du compte');
       }
 
       final userId = userCredential.user!.uid;
@@ -148,7 +148,7 @@ class AuthFirebaseDataSourceImpl implements AuthFirebaseDataSource {
     try {
       await _auth.signOut();
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de la déconnexion');
+      throw const ServerException(message: 'Erreur lors de la déconnexion');
     }
   }
 
@@ -193,7 +193,7 @@ class AuthFirebaseDataSourceImpl implements AuthFirebaseDataSource {
         token: await firebaseUser.getIdToken(),
       );
     } catch (e) {
-      throw ServerException(
+      throw const ServerException(
           message: 'Erreur lors de la récupération de l\'utilisateur');
     }
   }
@@ -204,7 +204,7 @@ class AuthFirebaseDataSourceImpl implements AuthFirebaseDataSource {
     try {
       final currentUser = _auth.currentUser;
       if (currentUser == null || currentUser.uid != userId) {
-        throw ServerException(message: 'Utilisateur non authentifié');
+        throw const ServerException(message: 'Utilisateur non authentifié');
       }
 
       String? profileImageUrl;
@@ -252,7 +252,7 @@ class AuthFirebaseDataSourceImpl implements AuthFirebaseDataSource {
       throw _handleFirebaseAuthError(e);
     } catch (e) {
       if (e is ServerException) rethrow;
-      throw ServerException(message: 'Erreur lors de la mise à jour du profil');
+      throw const ServerException(message: 'Erreur lors de la mise à jour du profil');
     }
   }
 
@@ -265,7 +265,7 @@ class AuthFirebaseDataSourceImpl implements AuthFirebaseDataSource {
       await ref.putFile(file);
       return await ref.getDownloadURL();
     } catch (e) {
-      throw ServerException(message: 'Erreur lors de l\'upload de l\'image');
+      throw const ServerException(message: 'Erreur lors de l\'upload de l\'image');
     }
   }
 
@@ -274,25 +274,25 @@ class AuthFirebaseDataSourceImpl implements AuthFirebaseDataSource {
       firebase_auth.FirebaseAuthException e) {
     switch (e.code) {
       case 'user-not-found':
-        return ServerException(
+        return const ServerException(
             message: 'Aucun utilisateur trouvé avec cet email');
       case 'wrong-password':
-        return ServerException(message: 'Mot de passe incorrect');
+        return const ServerException(message: 'Mot de passe incorrect');
       case 'email-already-in-use':
-        return ServerException(message: 'Cet email est déjà utilisé');
+        return const ServerException(message: 'Cet email est déjà utilisé');
       case 'invalid-email':
-        return ServerException(message: 'Adresse email invalide');
+        return const ServerException(message: 'Adresse email invalide');
       case 'weak-password':
-        return ServerException(message: 'Le mot de passe est trop faible');
+        return const ServerException(message: 'Le mot de passe est trop faible');
       case 'operation-not-allowed':
-        return ServerException(message: 'Opération non autorisée');
+        return const ServerException(message: 'Opération non autorisée');
       case 'user-disabled':
-        return ServerException(message: 'Ce compte a été désactivé');
+        return const ServerException(message: 'Ce compte a été désactivé');
       case 'too-many-requests':
-        return ServerException(
+        return const ServerException(
             message: 'Trop de tentatives. Réessayez plus tard');
       case 'network-request-failed':
-        return ServerException(
+        return const ServerException(
             message: 'Erreur réseau. Vérifiez votre connexion');
       default:
         return ServerException(

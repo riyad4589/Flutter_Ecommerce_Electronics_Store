@@ -18,7 +18,7 @@ class ProductListingPage extends StatefulWidget {
 
 class _ProductListingPageState extends State<ProductListingPage> {
   String _sortBy = 'default';
-  List<String> _selectedCategories = [];
+  final List<String> _selectedCategories = [];
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -281,8 +281,9 @@ class _ProductListingPageState extends State<ProductListingPage> {
                                       },
                                       loadingBuilder:
                                           (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
+                                        if (loadingProgress == null) {
                                           return child;
+                                        }
                                         return const Center(
                                             child: CircularProgressIndicator());
                                       },
