@@ -1332,10 +1332,21 @@ class _ProductsByClientTabState extends State<ProductsByClientTab> {
           }
         }
 
+        final double itemsTotal =
+            itemsWithProducts.fold(0.0, (double prev, item) {
+          final product = item['product'] as Map<String, dynamic>?;
+          final price = (product?['price'] ?? 0).toDouble();
+          final qty = (item['quantity'] ?? 0).toDouble();
+          return prev + price * qty;
+        });
+
         ordersWithItems.add({
           'id': orderDoc.id,
           'user_id': orderData['userId'] ?? '',
           'total': (orderData['total'] ?? 0).toDouble(),
+          'total_amount':
+              (orderData['total'] ?? orderData['total_amount'] ?? itemsTotal)
+                  .toDouble(),
           'status': orderData['status'] ?? 'pending',
           'created_at':
               orderData['createdAt']?.toDate().toIso8601String() ?? '',
@@ -1720,10 +1731,21 @@ class _AllOrdersTabState extends State<AllOrdersTab> {
           }
         }
 
+        final double itemsTotal =
+            itemsWithProducts.fold(0.0, (double prev, item) {
+          final product = item['product'] as Map<String, dynamic>?;
+          final price = (product?['price'] ?? 0).toDouble();
+          final qty = (item['quantity'] ?? 0).toDouble();
+          return prev + price * qty;
+        });
+
         ordersWithItems.add({
           'id': orderDoc.id,
           'user_id': orderData['userId'] ?? '',
           'total': (orderData['total'] ?? 0).toDouble(),
+          'total_amount':
+              (orderData['total'] ?? orderData['total_amount'] ?? itemsTotal)
+                  .toDouble(),
           'status': orderData['status'] ?? 'pending',
           'created_at':
               orderData['createdAt']?.toDate().toIso8601String() ?? '',

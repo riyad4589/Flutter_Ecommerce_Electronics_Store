@@ -1,0 +1,45 @@
+Dépendances (pubspec.yaml)
+
+flutter: SDK principal — exécute l'app Flutter.
+
+cupertino_icons: jeu d'icônes iOS (Cupertino) utilisé pour UI cohérente sur iOS.
+
+go_router: routage déclaratif / navigation (gestion des routes nommées, deep links).
+
+provider: gestion d'état simple (injection de providers, écoute de changements — utilisé partout pour AuthProvider, OrdersProvider, etc.).
+
+cached_network_image: charge et met en cache les images distantes (évite re-téléchargement, gère placeholder / erreur).
+
+shimmer: effet "skeleton" / chargement animé (placeholder visuel pendant fetch).
+
+flutter_staggered_animations: animations d'entrée/listes/grilles avec effets décalés.
+
+Firebase stack:
+
+firebase_core: initialisation Firebase dans l'app (obligatoire).
+firebase_auth: gestion de l'authentification (login/logout, currentUser).
+cloud_firestore: base de données Firestore (lecture/écriture collections users, orders, products).
+firebase_storage: stockage de fichiers (images produits, uploads).
+firebase_app_check: App Check (protection des APIs Firebase contre usage non autorisé).
+Réseau / HTTP:
+
+dio: client HTTP avancé (intercepteurs, timeouts, form data) — utile pour appels API externes.
+pretty_dio_logger: logger lisible pour requêtes/réponses Dio (debug réseau).
+Stockage local / fichiers:
+
+path_provider: accès aux répertoires système (cache, documents).
+path: utilitaires pour manipuler les chemins de fichiers (join, basename).
+sqflite: SQLite local — cache structuré ou stockage offline si utilisé.
+Multimédia:
+
+image_picker: sélectionner/prendre une photo depuis la galerie ou caméra (upload de produit/profil).
+Utilitaires / architecture:
+
+equatable: facilite la comparaison d'objets (models immuables, évite boilerplate ==/hashCode).
+dartz: primitives de programmation fonctionnelle (Either, Option) pour gestion d'erreurs sans exceptions.
+get_it: service locator / dependency injection (enregistrement de singletons/use-cases dans injection_container.dart).
+Dev / outils
+
+flutter_test: framework de test intégré (unit & widget tests).
+flutter_lints: règles de lint recommandées (qualité / style de code).
+flutter_launcher_icons: génération automatique des icônes d'application (configurée dans pubspec.yaml).

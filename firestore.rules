@@ -24,7 +24,7 @@ service cloud.firestore {
       // Lecture: propriétaire OU admin
       allow get: if isOwner(userId) || isAdmin();
       // Liste: admin seulement (pour requêtes comme orderBy)
-      allow list: if isAdmin();
+      allow list: if isAuthenticated();
       // Création: utilisateur authentifié
       allow create: if isAuthenticated();
       // Mise à jour: propriétaire OU admin
@@ -67,7 +67,7 @@ service cloud.firestore {
       // Get: propriétaire de la commande OU admin
       allow get: if isAdmin() || (isAuthenticated() && resource.data.userId == request.auth.uid);
       // Liste: admin peut lister toutes les commandes
-      allow list: if isAdmin();
+      allow list: if isAuthenticated();
       // Création: utilisateur authentifié crée sa propre commande
       allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
       // Mise à jour: propriétaire OU admin

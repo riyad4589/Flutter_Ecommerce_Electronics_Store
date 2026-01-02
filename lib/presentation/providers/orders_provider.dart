@@ -139,9 +139,13 @@ class OrdersProvider with ChangeNotifier {
         return false;
       },
       (_) {
-        // Supprimer de la liste locale
-        _orders.removeWhere((order) => order.id == orderId);
-        notifyListeners();
+        // Retarder la suppression locale et le notify pour laisser l'UI
+        // rediriger (évite l'affichage temporaire "Commande introuvable").
+        Future.delayed(const Duration(milliseconds: 150), () {
+          _orders.removeWhere((order) => order.id == orderId);
+          notifyListeners();
+        });
+
         return true;
       },
     );

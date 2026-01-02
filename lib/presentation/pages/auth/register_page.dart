@@ -184,13 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         : null,
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Ajouter une photo',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                ),
+
                 const SizedBox(height: 24),
                 CustomTextField(
                   controller: _nameController,

@@ -67,13 +67,13 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const ThemeAwareImage(
-                  lightImagePath: 'assets/images/light.png',
-                  darkImagePath: 'assets/images/dark.png',
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.contain,
-                ),
+                // const ThemeAwareImage(
+                //   lightImagePath: 'assets/images/light.png',
+                //   darkImagePath: 'assets/images/dark.png',
+                //   width: 200,
+                //   height: 200,
+                //   fit: BoxFit.contain,
+                // ),
                 const SizedBox(height: 24),
                 Text(
                   'Bienvenue sur Online Shop !',
@@ -85,12 +85,12 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 32),
                 CustomTextField(
                   controller: _usernameController,
-                  labelText: 'Nom d\'utilisateur',
-                  hintText: 'Entrez votre nom d\'utilisateur',
+                  labelText: 'Email',
+                  hintText: 'Entrez votre email',
                   keyboardType: TextInputType.text,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer votre nom d\'utilisateur';
+                      return 'Veuillez entrer votre email';
                     }
                     return null;
                   },

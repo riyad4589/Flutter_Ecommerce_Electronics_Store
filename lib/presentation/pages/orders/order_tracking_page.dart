@@ -90,7 +90,9 @@ class OrderTrackingPage extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Suivi de commande'),
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back_ios,
+                  color: Colors.white, size: 22),
+              tooltip: 'Retour',
               onPressed: () => context.go('/orders'),
             ),
           ),
@@ -166,42 +168,8 @@ class OrderTrackingPage extends StatelessWidget {
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-
                 _buildTrackingTimeline(context, order),
-
                 const SizedBox(height: 24),
-
-                // Informations de livraison
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.local_shipping,
-                                color: AppColors.primary),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Informations de livraison',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        const Divider(height: 24),
-                        _buildInfoRow(context, 'Transporteur',
-                            orderData['carrier'] as String),
-                        const SizedBox(height: 8),
-                        _buildInfoRow(context, 'N° de suivi',
-                            orderData['trackingNumber'] as String),
-                      ],
-                    ),
-                  ),
-                ),
 
                 const SizedBox(height: 16),
 
@@ -246,8 +214,7 @@ class OrderTrackingPage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                ))
-                            ,
+                                )),
                         const Divider(),
                         const SizedBox(height: 8),
                         Row(
@@ -297,36 +264,36 @@ class OrderTrackingPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () {
-                          _showDeleteOrderDialog(context);
-                        },
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        label: const Text('Supprimer'),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.all(16),
-                          foregroundColor: Colors.red,
-                        ),
-                      ),
-                    ),
+                    // const SizedBox(width: 12),
+                    // Expanded(
+                    //   child: OutlinedButton.icon(
+                    //     onPressed: () {
+                    //       _showDeleteOrderDialog(context);
+                    //     },
+                    //     icon: const Icon(Icons.delete, color: Colors.red),
+                    //     label: const Text('Supprimer'),
+                    //     style: OutlinedButton.styleFrom(
+                    //       padding: const EdgeInsets.all(16),
+                    //       foregroundColor: Colors.red,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      context.go('/contact-support');
-                    },
-                    icon: const Icon(Icons.support_agent),
-                    label: const Text('Contacter le support'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.all(16),
-                    ),
-                  ),
-                ),
+                // const SizedBox(height: 12),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: OutlinedButton.icon(
+                //     onPressed: () {
+                //       context.go('/contact-support');
+                //     },
+                //     icon: const Icon(Icons.support_agent),
+                //     label: const Text('Contacter le support'),
+                //     style: OutlinedButton.styleFrom(
+                //       padding: const EdgeInsets.all(16),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -620,12 +587,10 @@ class OrderTrackingPage extends StatelessWidget {
         ),
       );
 
-      // Retourner à la page des commandes après 1 seconde
-      Future.delayed(const Duration(seconds: 1), () {
-        if (context.mounted) {
-          context.go('/orders');
-        }
-      });
+      // Rediriger immédiatement vers la page des commandes
+      if (context.mounted) {
+        context.pop();
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -654,12 +619,10 @@ class OrderTrackingPage extends StatelessWidget {
         ),
       );
 
-      // Retourner à la page des commandes après 1 seconde
-      Future.delayed(const Duration(seconds: 1), () {
-        if (context.mounted) {
-          context.go('/orders');
-        }
-      });
+      // Rediriger immédiatement vers la page des commandes
+      if (context.mounted) {
+        context.pop();
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
